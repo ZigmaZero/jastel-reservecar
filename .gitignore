@@ -1,4 +1,3 @@
-reservecar-frontend
-reservecar-backend
 database
 ngrok.log
+.env
