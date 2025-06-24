@@ -8,14 +8,10 @@ services:
       args:
         VITE_LINE_CLIENT_ID: ${VITE_LINE_CLIENT_ID}
         VITE_REDIRECT_URI: ${VITE_REDIRECT_URI}
-        DATABASE_NAME: ${DATABASE_NAME}
-        TOKEN_SECRET: ${TOKEN_SECRET}
-        LINE_CLIENT_SECRET: ${LINE_CLIENT_SECRET}
-        LINE_CLIENT_ID: ${LINE_CLIENT_ID}
-        LINE_MESSAGING_API_ACCESS_TOKEN: ${LINE_MESSAGING_API_ACCESS_TOKEN}
     ports:
       - "3000:3000"
     volumes:
       - ./database:/app/backend/database
+      - ./.env.backend:/app/backend/.env:ro
     env_file:
       - .env
