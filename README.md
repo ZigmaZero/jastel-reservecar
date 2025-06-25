@@ -7,7 +7,9 @@
     <img src="https://img.shields.io/badge/License-ISC-blue.svg" alt="License: ISC">
   </a>
 </p>
+
 In the work process, employees may require the usage of a vehicle to drive to off-site work locations. Employees who do not wish to use their personal car may choose to rent a company-provided car instead. The ReserveCar System is a platform to rent cars for users within the organization. By using a public LINE Official Account, users can easily access the system from the domestically popular LINE platform. The LINE platform links to an external webpage with a whitelist that users can request access to by linking their LINE account with their employee information. This way, users can conveniently access the car information and rental schedule and submit a car rental request form using the provided input method. The system also uses a relational database management system, which will allow the administrator to access and modify the car data easily and safely.
+
 ## How to Setup
 ### Preparation
 1. Install Docker
