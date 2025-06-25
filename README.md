@@ -63,5 +63,14 @@ LINE_MESSAGING_API_ACCESS_TOKEN = sD/tIAZMl...
 # The captured group ID
 LINE_LOGGING_GROUP_ID = 2572aCd0...
 ```
+## Architecture
+This project is structured around a modern full-stack JavaScript/TypeScript architecture optimized for speed, scalability, and developer experience.
+- Frontend: Built with Vite, React, and TypeScript. The UI is designed using Material UI enhanced by MUI X components.
+- Backend: Node.js with Express for API endpoint handling and interfacing with external services.
+- Database: `better-sqlite3` for a lightweight, fast synchronous SQL database.
+- Authentication: JWT for session management with LINE Login integration for social login.
+- Messaging: Utilizes LINE Messaging API to send messages in real time.
+- DevOps: Tech stack containerized with Docker.
+
 ## Contact
 This repository will not be actively maintained by the original author after July 31, 2025. Please open an issue for questions or updates.
