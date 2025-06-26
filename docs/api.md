@@ -74,7 +74,7 @@
 
 ## Car Endpoints
 
-### GET /car
+### GET /cars
 
 **Description:** Obtain paginated car information
 
@@ -120,7 +120,7 @@
 | 401 | Unauthorized | Invalid auth token |
 | 500 | Internal Server Error | Server-side issue |
 
-### GET /car/:carId
+### GET /cars/:carId
 
 **Description:** Obtain car information of this carId
 
@@ -175,7 +175,7 @@
 | 401 | Unauthorized | Invalid auth token |
 | 500 | Internal Server Error | Server-side issue |
 
-### PUT /car/:carId
+### PUT /cars/:carId
 
 **Description:** Update car information with this carId
 
@@ -207,7 +207,7 @@
 | 404 | Not Found | Car not found |
 | 500 | Internal Server Error | Server-side issue |
 
-### DELETE /car/:carId
+### DELETE /cars/:carId
 
 **Description**: Deletes the car with this carId
 
@@ -224,3 +224,307 @@
 ```
 
 ## Employee Endpoints
+
+### GET /employees
+
+**Description:**
+
+**Authorization:**
+
+**Query Parameters:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### GET /employees/:userId
+
+**Description:**
+
+**Authorization:**
+
+**Query Parameters:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### PUT /employees/:userId/verify
+
+**Description:**
+
+**Authorization:**
+
+**Request Parameters:**
+
+**Request Body:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### PUT /employees/:userId
+
+**Description:**
+
+**Authorization:**
+
+**Request Parameters:**
+
+**Request Body:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### DELETE /employees/:userId
+
+**Description:**
+
+**Authorization:**
+
+**Request Parameters:**
+
+**Response Example:**
+
+**Error Codes:**
+
+## LINE Endpoints
+
+### GET /line
+
+**Description:**
+
+**Authorization:**
+
+**Query Parameters:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### DELETE /line/:state
+
+**Description:**
+
+**Authorization:**
+
+**Request Parameters:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### POST /line/auth
+
+**Description:**
+
+**Authorization:**
+
+**Request Body:**
+
+**Response Example:**
+
+**Error Codes:**
+
+## Reservation Endpoints
+
+### GET /reservations
+
+**Description:**
+
+**Authorization:**
+
+**Query Parameters:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### GET /reservations/export
+
+**Description:**
+
+**Authorization:**
+
+**Query Parameters:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### GET /reservations/:reservationId
+
+**Description:**
+
+**Authorization:**
+
+**Query Parameters:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### PUT /reservations/:reservationId
+
+**Description:**
+
+**Authorization:**
+
+**Request Parameters:**
+
+**Request Body:**
+
+**Response Example:**
+
+**Error Codes:**
+
+## Team Endpoints
+
+### GET /teams
+
+**Description:**
+
+**Authorization:**
+
+**Query Parameters:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### GET /teams/all
+
+**Description:**
+
+**Authorization:**
+
+**Query Parameters:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### GET /teams/:teamId
+
+**Description:**
+
+**Authorization:**
+
+**Query Parameters:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### POST /teams
+
+**Description:**
+
+**Authorization:**
+
+**Request Body:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### PUT /teams/:teamId
+
+**Description:**
+
+**Authorization:**
+
+**Request Parameters:**
+
+**Request Body:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### DELETE /teams/:teamId
+
+**Description:**
+
+**Authorization:**
+
+**Request Parameters:**
+
+**Response Example:**
+
+**Error Codes:**
+
+## User Endpoints
+
+### POST /user/register
+
+**Description:**
+
+**Authorization:**
+
+**Request Body:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### POST /user/login
+
+**Description:**
+
+**Authorization:**
+
+**Request Body:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### POST /user/checkin
+
+**Description:**
+
+**Authorization:**
+
+**Request Body:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### POST /user/checkout
+
+**Description:**
+
+**Authorization:**
+
+**Request Body:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### GET /user/cars
+
+**Description:**
+
+**Authorization:**
+
+**Query Parameters:**
+
+**Response Example:**
+
+**Error Codes:**
+
+### GET /user/reservations
+
+**Description:**
+
+**Authorization:**
+
+**Query Parameters:**
+
+**Response Example:**
+
+**Error Codes:**
