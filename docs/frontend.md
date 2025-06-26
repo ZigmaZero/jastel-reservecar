@@ -32,5 +32,9 @@ Each API endpoint is abstracted into functions under `/api` for easier reuse and
 Lazy loading of route-level components ensures that users only load what's necessary for their role. Employee and admin modules are loaded separately. MUI's tree-shaking and Vite's hot module replacement speeds up load times and minimizes data size.
 ## Build
 To run the app locally:
-```npm run dev```
+
+```
+npm run dev
+```
+
 ⚠️ Development mode currently lacks mock services or dev-specific APIs. API-dependent features will fail unless a backend is available. Future improvements may include dev-specific mocking and environment variables per mode.
