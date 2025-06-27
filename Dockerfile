@@ -7,8 +7,8 @@ WORKDIR /app
 ARG VITE_LINE_CLIENT_ID
 ARG VITE_REDIRECT_URI
 
-# Clone the frontend repository
-RUN git clone https://github.com/ZigmaZero/reservecar-frontend.git frontend
+# Copy the frontend repository
+COPY frontend frontend
 
 # Set build envs for frontend
 ENV VITE_LINE_CLIENT_ID=$VITE_LINE_CLIENT_ID
@@ -26,7 +26,7 @@ FROM node:22.16.0 AS backend-builder
 WORKDIR /app
 
 # Clone the backend repository
-RUN git clone https://github.com/ZigmaZero/reservecar-backend.git backend
+COPY backend backend
 
 # Install backend dependencies
 RUN cd backend && npm install
