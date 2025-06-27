@@ -278,8 +278,6 @@
 ```
 
 **Error Codes:**
-
-**Error Codes:**
 | Code | Message | Description |
 |------|---------|-------------|
 | 400 | Bad Request | Invalid query parameters |
@@ -511,200 +509,531 @@ If the state was not found:
 
 ### GET /reservations
 
-**Description:**
+**Description:** Get a paginated, sortable, and filterable list of reservations.
 
-**Authorization:**
+**Authorization:** Admin bearer token
 
 **Query Parameters:**
+| Parameter   | Type   | Description                                                                                              | Required |
+| ----------- | ------ | -------------------------------------------------------------------------------------------------------- | -------- |
+| page        | number | Page index (0-based). Default: `0`                                                                       | No       |
+| pageSize    | number | Number of results per page. Default: `10`                                                                | No       |
+| sortField   | string | Field to sort by: `id`, `userId`, `user`, `carId`, `car`, `description`, `checkinTime`, `checkoutTime`   | No       |
+| sortOrder   | string | Sorting order: `asc` or `desc`                                                                           | No       |
+| filterField | string | Field to filter on: `id`, `userId`, `user`, `carId`, `car`, `description`, `checkinTime`, `checkoutTime` | No       |
+| filterOp    | string | Filter operation: `=`, `contains`, `onOrBefore`, `onOrAfter`, `isEmpty`, `isNotEmpty`                    | No       |
+| filterValue | string | Filter value depending on the field and filterOp                                                         | No       |
 
 **Response Example:**
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "userId": 2,
+      "carId": 3,
+      "description": "Reserved by admin",
+      "checkinTime": "2025-06-27T14:00:00.000Z",
+      "checkoutTime": null
+    }
+  ],
+  "total": 30,
+  "page": 0,
+  "pageSize": 10,
+  "maxPages": 3
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid query parameters |
+| 401 | Unauthorized | Invalid auth token |
+| 500 | Internal Server Error | Server-side issue |
 
 ### GET /reservations/export
 
-**Description:**
+**Description:** Get all reservations within a specified time range.
 
-**Authorization:**
+**Authorization:** Admin bearer token
 
 **Query Parameters:**
+| Parameter | Type   | Description                                        | Required |
+| --------- | ------ | -------------------------------------------------- | -------- |
+| startTime | string | Start of time range (ISO8601). Default: 1970-01-01 | No       |
+| endTime   | string | End of time range (ISO8601). Default: 9999-12-31   | No       |
 
 **Response Example:**
+```json
+[
+  {
+    "id": 1,
+    "userId": 2,
+    "carId": 3,
+    "description": "Reserved by admin",
+    "checkinTime": "2025-06-27T14:00:00.000Z",
+    "checkoutTime": null
+  }
+]
+```
 
 **Error Codes:**
 
 ### GET /reservations/:reservationId
 
-**Description:**
+**Description:** Get details of a reservation by its reservationId.
 
-**Authorization:**
+**Authorization:** Admin bearer token
 
 **Query Parameters:**
+| Parameter     | Type   | Description                  | Required |
+| ------------- | ------ | ---------------------------- | -------- |
+| reservationId | number | ID of the reservation record | Yes      |
 
 **Response Example:**
+```json
+{
+  "id": 1,
+  "userId": 2,
+  "carId": 3,
+  "description": "Reserved",
+  "checkinTime": "2025-06-27T14:00:00.000Z",
+  "checkoutTime": null
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid request parameters |
+| 401 | Unauthorized | Invalid auth token |
+| 404 | Not Found | Reservation not found |
+| 500 | Internal Server Error | Server-side issue |
+
 
 ### PUT /reservations/:reservationId
 
-**Description:**
+**Description:** Update the checkin and checkout time of a reservation.
 
-**Authorization:**
+**Authorization:** Admin bearer token
 
 **Request Parameters:**
+| Parameter     | Type   | Description                  | Required |
+| ------------- | ------ | ---------------------------- | -------- |
+| reservationId | number | ID of the reservation record | Yes      |
 
 **Request Body:**
+```json
+{
+  "checkinTime": "2025-06-27T14:00:00.000Z",
+  "checkoutTime": "2025-06-27T16:00:00.000Z"
+}
+```
+| Field        | Type   | Description                     | Required |
+| ------------ | ------ | ------------------------------- | -------- |
+| checkinTime  | string | ISO8601 timestamp for check-in  | Yes      |
+| checkoutTime | string | ISO8601 timestamp for check-out | Yes      |
 
 **Response Example:**
+```json
+{
+  "message": "Reservation updated successfully."
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid request parameters |
+| 401 | Unauthorized | Invalid auth token |
+| 404 | Not Found | Reservation not found |
+| 500 | Internal Server Error | Server-side issue |
 
 ## Team Endpoints
 
 ### GET /teams
 
-**Description:**
+**Description:** Get a paginated, sortable, and filterable list of teams.
 
-**Authorization:**
+**Authorization:** Admin bearer token
 
 **Query Parameters:**
+| Parameter   | Type   | Description                               | Required |
+| ----------- | ------ | ----------------------------------------- | -------- |
+| page        | number | Page index (0-based). Default: `0`        | No       |
+| pageSize    | number | Number of results per page. Default: `10` | No       |
+| sortField   | string | Sort by `id` or `name`                    | No       |
+| sortOrder   | string | `asc` or `desc`                           | No       |
+| filterField | string | `id` or `name`                            | No       |
+| filterOp    | string | `=` for id, `contains` for name           | No       |
+| filterValue | string | Value to filter                           | No       |
 
 **Response Example:**
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "Engineering"
+    }
+  ],
+  "total": 5,
+  "page": 0,
+  "pageSize": 10,
+  "maxPages": 1
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid query parameters |
+| 401 | Unauthorized | Invalid auth token |
+| 500 | Internal Server Error | Server-side issue |
 
 ### GET /teams/all
 
-**Description:**
+**Description:** Get a full list of all teams (no pagination).
 
-**Authorization:**
+**Authorization:** Bearer token (Admin or user)
 
-**Query Parameters:**
+**Query Parameters:** None
 
 **Response Example:**
+```json
+{
+  "teams": [
+    {
+      "id": 1,
+      "name": "Engineering"
+    },
+    {
+      "id": 2,
+      "name": "QA"
+    }
+  ]
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 401 | Unauthorized | Invalid auth token |
+| 500 | Internal Server Error | Server-side issue |
 
 ### GET /teams/:teamId
 
-**Description:**
+**Description:** Get details of a single team.
 
-**Authorization:**
+**Authorization:** Admin bearer token
 
 **Query Parameters:**
+| Parameter | Type   | Description             | Required |
+| --------- | ------ | ----------------------- | -------- |
+| teamId    | number | ID of the team to fetch | Yes      |
 
 **Response Example:**
+```json
+{
+  "id": 1,
+  "name": "Engineering"
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid request parameters |
+| 401 | Unauthorized | Invalid auth token |
+| 404 | Not Found | Reservation not found |
+| 500 | Internal Server Error | Server-side issue |
 
 ### POST /teams
 
-**Description:**
+**Description:** Create a new team.
 
-**Authorization:**
+**Authorization:** Admin bearer token
 
 **Request Body:**
+```json
+{
+  "name": "New Team"
+}
+```
+| Field | Type   | Description      | Required |
+| ----- | ------ | ---------------- | -------- |
+| name  | string | Name of the team | Yes      |
 
 **Response Example:**
+```json
+{
+  "success": true
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid request parameters |
+| 401 | Unauthorized | Invalid auth token |
+| 500 | Internal Server Error | Server-side issue |
 
 ### PUT /teams/:teamId
 
-**Description:**
+**Description:** Update the name of a team, and send a notification to all its employees.
 
-**Authorization:**
+**Authorization:** Admin bearer token
 
 **Request Parameters:**
+| Parameter | Type   | Description              | Required |
+| --------- | ------ | ------------------------ | -------- |
+| teamId    | number | ID of the team to update | Yes      |
 
 **Request Body:**
+```json
+{
+  "name": "Updated Team"
+}
+```
+| Field | Type   | Description   | Required |
+| ----- | ------ | ------------- | -------- |
+| name  | string | New team name | Yes      |
 
 **Response Example:**
+```json
+{
+  "message": "Team updated successfully.",
+  "line": "All messages sent successfully."
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid request parameters |
+| 401 | Unauthorized | Invalid auth token |
+| 404 | Not Found | Reservation not found |
+| 500 | Internal Server Error | Server-side issue |
 
 ### DELETE /teams/:teamId
 
-**Description:**
+**Description:** Delete a team. Only teams with no employees and no cars assigned can be removed.
 
-**Authorization:**
+**Authorization:** Admin bearer token
 
-**Request Parameters:**
+**Request Parameters:** 
+| Parameter | Type   | Description              | Required |
+| --------- | ------ | ------------------------ | -------- |
+| teamId    | number | ID of the team to delete | Yes      |
 
 **Response Example:**
+```json
+{
+  "message": "Team deleted successfully. All members have been unassigned."
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid request parameters |
+| 401 | Unauthorized | Invalid auth token |
+| 403 | Forbidden | Cannot delete team while cars or employees are assigned |
+| 404 | Not Found | Reservation not found |
+| 500 | Internal Server Error | Server-side issue |
 
 ## User Endpoints
 
 ### POST /user/register
 
-**Description:**
+**Description:** Registers a user in the system (unverified).
 
-**Authorization:**
+**Authorization:** None
 
 **Request Body:**
+```json
+{
+  "fullName": "John Doe",
+  "lineId": "Uxxxxxxxxxx"
+}
+```
+| Field    | Type   | Description      | Required |
+| -------- | ------ | ---------------- | -------- |
+| fullName | string | User’s full name | Yes      |
+| lineId   | string | LINE user ID     | Yes      |
 
 **Response Example:**
+```json
+{
+  "success": true
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid request parameters |
+| 500 | Internal Server Error | Server-side issue |
 
 ### POST /user/login
 
-**Description:**
+**Description:** Authenticates the user by LINE ID and returns a JWT token.
 
-**Authorization:**
+**Authorization:** None
 
 **Request Body:**
+```json
+{
+  "lineId": "Uxxxxxxxxxx"
+}
+```
+| Field  | Type   | Description  | Required |
+| ------ | ------ | ------------ | -------- |
+| lineId | string | LINE user ID | Yes      |
 
 **Response Example:**
+```json
+{
+  "success": true,
+  "token": "eyJhbGciOiJIUzI1NiIsInR...",
+  "user": {
+    "id": 1,
+    "fullName": "John Doe",
+    "lineId": "Uxxxxxxxxxx",
+    "teamId": 2
+  }
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid request parameters |
+| 404 | Not Found | User not found |
+| 500 | Internal Server Error | Server-side issue |
+
 
 ### POST /user/checkin
 
-**Description:**
+**Description:** Allows the user to check in with a car to create a new reservation.
 
-**Authorization:**
+**Authorization:** User bearer token
 
 **Request Body:**
+```json
+{
+  "carId": 1,
+  "description": "Going to client site"
+}
+```
+| Field       | Type   | Description             | Required |
+| ----------- | ------ | ----------------------- | -------- |
+| carId       | number | Car ID to reserve       | Yes      |
+| description | string | Description of the work | Yes      |
 
 **Response Example:**
+```json
+{
+  "success": true,
+  "line": "Message sent successfully"
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid request parameters |
+| 401 | Unauthorized | Invalid auth token |
+| 404 | Not Found | User/Car not found |
+| 500 | Internal Server Error | Server-side issue |
 
 ### POST /user/checkout
 
-**Description:**
+**Description:** Allows the user to check out of an active reservation.
 
-**Authorization:**
+**Authorization:** User bearer token
 
 **Request Body:**
+```json
+{
+  "reservationId": 5
+}
+```
+| Field         | Type   | Description              | Required |
+| ------------- | ------ | ------------------------ | -------- |
+| reservationId | number | Reservation to check out | Yes      |
 
 **Response Example:**
+```json
+{
+  "message": "Checkout successful."
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid request parameters |
+| 401 | Unauthorized | Invalid auth token |
+| 403 | Forbidden | Reservation does not belong to user |
+| 404 | Not Found | Reservation not found |
+| 500 | Internal Server Error | Server-side issue |
 
 ### GET /user/cars
 
-**Description:**
+**Description:** Get cars assigned to the user’s team. Optionally override team via query.
 
-**Authorization:**
+**Authorization:** User bearer token
 
 **Query Parameters:**
+| Parameter | Type   | Description              | Required |
+| --------- | ------ | ------------------------ | -------- |
+| teamId    | number | Optional override teamId | No       |
 
 **Response Example:**
+{
+  "cars": [
+    {
+      "id": 1,
+      "plateNumber": "ABC-123",
+      "teamId": 2
+    }
+  ]
+}
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 401 | Unauthorized | Invalid auth token |
+| 404 | Not Found | User not found |
+| 500 | Internal Server Error | Server-side issue |
 
 ### GET /user/reservations
 
-**Description:**
+**Description:** Get a list of reservations made by the user that has not been completed
 
-**Authorization:**
+**Authorization:** User bearer token
 
-**Query Parameters:**
+**Query Parameters:** None
 
 **Response Example:**
+```json
+{
+  "reservations": [
+    {
+      "id": 10,
+      "carId": 1,
+      "userId": 5,
+      "description": "Trip to client",
+      "checkinTime": "2025-06-25T08:00:00.000Z",
+      "checkoutTime": null
+    }
+  ]
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 401 | Unauthorized | Invalid auth token |
+| 500 | Internal Server Error | Server-side issue |
