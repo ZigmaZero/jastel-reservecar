@@ -12,20 +12,20 @@
 **Request Body:**
 ```json
 {
-    "name": "admin",
-    "password": "adminpassword"
+  "name": "admin",
+  "password": "adminpassword"
 }
 ```
 
 **Response Example:**
 ```json
 {
-    "message": "Login successful",
-    "admin": {
-        "id": "1",
-        "name": "admin"
-    },
-    "token": "auth_token"
+  "message": "Login successful",
+  "admin": {
+    "id": "1",
+    "name": "admin"
+  },
+  "token": "auth_token"
 }
 ```
 
@@ -40,7 +40,7 @@
 
 **Description:** Update admin information
 
-**Authorization:** Bearer Auth
+**Authorization:** Admin Bearer token
 
 **Request Parameters:**
 - `adminId`: The adminID of the admin to update
@@ -48,19 +48,19 @@
 **Request Body:**
 ```json
 {
-    "name": "newadmin",
-    "password": "newadminpassword"
+  "name": "newadmin",
+  "password": "newadminpassword"
 }
 ```
 
 **Response Example:**
 ```json
 {
-    "admin": {
-        "id": "1",
-        "name": "newadmin"
-    },
-    "token": "new_auth_token"
+  "admin": {
+    "id": "1",
+    "name": "newadmin"
+  },
+  "token": "new_auth_token"
 }
 ```
 
@@ -76,40 +76,42 @@
 
 ### GET /cars
 
-**Description:** Obtain paginated car information
+**Description:** Obtain a paginated, sortable, and filterable list of cars.
 
-**Authorization:** Bearer Auth
+**Authorization:** Admin Bearer token
 
 **Query Parameters:**
-- `page`: The page to fetch
-- `pageSize`: The size of the page
-- `sortField`: The field to sort the result by
-- `sortOrder`: The sorting direction
-- `filterField`: The field to filter the data by
-- `filterOp`: The filter operation
-- `filterValue`: The filter value
+| Parameter   | Type   | Description                                                   | Required |
+| ----------- | ------ | ------------------------------------------------------------- | -------- |
+| page        | number | Page index (0-based). Default: `0`                            | No       |
+| pageSize    | number | Number of results per page. Default: `10`                     | No       |
+| sortField   | string | Field to sort by: `id`, `plateNumber`, `teamName`             | No       |
+| sortOrder   | string | Sorting order: `asc` or `desc`                                | No       |
+| filterField | string | Field to filter on: `id`, `plateNumber`, `teamId`, `teamName` | No       |
+| filterOp    | string | Filter operation: `=` or `contains`                           | No       |
+| filterValue | string | Filter value depending on the filterField                     | No       |
 
 **Response Example:**
 ```json
 {
-    "data": [
-        {
-            "id": 1,
-            "plateNumber": "ABC-123",
-            "teamId": 1,
-            "teamName": "Some Team"
-        },
-        {
-            "id": 2,
-            "plateNumber": "ZZZ-111",
-            "teamId": 1,
-            "teamName": "Some Team"
-        }
-    ],
-    "total": 2,
-    "page": 0,
-    "pageSize": 10,
-    "maxPages": 1
+  "data": [
+    {
+      "id": 1,
+      "plateNumber": "ABC-123",
+      "teamId": 1,
+      "teamName": "Some Team"
+    },
+    {
+      "id": 2,
+      "plateNumber": "ZZZ-111",
+      "teamId": 1,
+      "teamName": "Some Team"
+    }
+  ],
+  "total": 2,
+  "page": 0,
+  "pageSize": 10,
+  "maxPages": 1
 }
 ```
 
@@ -122,20 +124,22 @@
 
 ### GET /cars/:carId
 
-**Description:** Obtain car information of this carId
+**Description:** Obtain details of a single car by its carId.
 
-**Authorization:** Bearer Auth
+**Authorization:** Admin Bearer token
 
 **Request Parameters:**
-- `carId`: The ID of the car to fetch
+| Parameter | Type   | Description   | Required |
+| --------- | ------ | ------------- | -------- |
+| carId     | number | ID of the car | Yes      |
 
 **Response Example:**
 ```json
 {
-    "id": 1,
-    "plateNumber": "ABC-123",
-    "teamId": 1,
-    "teamName": "Some Team"
+  "id": 1,
+  "plateNumber": "ABC-123",
+  "teamId": 1,
+  "teamName": "Some Team"
 }
 ```
 
@@ -149,22 +153,26 @@
 
 ### POST /car
 
-**Description:** Create a car
+**Description:** Create a new car record in the system.
 
-**Authorization:** Bearer Auth
+**Authorization:** Admin Bearer token
 
 **Request Body:**
 ```json
 {
-    "plateNumber": "ABC-123",
-    "teamId": 1
+  "plateNumber": "ABC123",
+  "teamId": 2
 }
 ```
+| Field       | Type   | Description                      | Required |
+| ----------- | ------ | -------------------------------- | -------- |
+| plateNumber | string | License plate number (non-empty) | Yes      |
+| teamId      | number | Team ID the car belongs to       | Yes      |
 
 **Response Example**
 ```json
 {
-    "success": true
+  "success": true
 }
 ```
 
@@ -179,10 +187,12 @@
 
 **Description:** Update car information with this carId
 
-**Authorization:** Bearer Auth
+**Authorization:** Admin Bearer token
 
 **Request Parameters:**
-- `carId`: ID of the car to update
+| Parameter | Type   | Description   | Required |
+| --------- | ------ | ------------- | -------- |
+| carId     | number | ID of the car | Yes      |
 
 **Request Body:**
 ```json
@@ -191,6 +201,10 @@
     "teamId": 2
 }
 ```
+| Field       | Type   | Description                      | Required |
+| ----------- | ------ | -------------------------------- | -------- |
+| plateNumber | string | License plate number (non-empty) | Yes      |
+| teamId      | number | Team ID                          | Yes      |
 
 **Response Example**
 ```json
@@ -211,10 +225,12 @@
 
 **Description**: Deletes the car with this carId
 
-**Authorization:** Bearer Auth
+**Authorization:** Admin Bearer token
 
 **Request Parameters:**
-- `carId`: ID of the car to delete
+| Parameter | Type   | Description   | Required |
+| --------- | ------ | ------------- | -------- |
+| carId     | number | ID of the car | Yes      |
 
 **Response Example**
 ```json
@@ -227,105 +243,269 @@
 
 ### GET /employees
 
-**Description:**
+**Description:** Obtain a paginated, sortable, and filterable list of employee information.
 
-**Authorization:**
+**Authorization:** Admin Bearer token
 
 **Query Parameters:**
+| Parameter   | Type   | Description                                                        | Required |
+| ----------- | ------ | ------------------------------------------------------------------ | -------- |
+| page        | number | Page index (0-based). Default: `0`                                 | No       |
+| pageSize    | number | Number of results per page. Default: `10`                          | No       |
+| sortField   | string | Field to sort by: `id`, `teamId`, `verified`, `name`, `teamName`   | No       |
+| sortOrder   | string | Sorting order: `asc` or `desc`                                     | No       |
+| filterField | string | Field to filter on: `id`, `name`, `verified`, `teamId`, `teamName` | No       |
+| filterOp    | string | Filter operation: `=`, `contains`, `is`                            | No       |
+| filterValue | string | Filter value, depending on filterField                             | No       |
 
 **Response Example:**
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "teamId": 2,
+      "teamName": "Engineering",
+      "verified": true
+    }
+  ],
+  "total": 25,
+  "page": 0,
+  "pageSize": 10,
+  "maxPages": 3
+}
+```
 
 **Error Codes:**
+
+**Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid query parameters |
+| 401 | Unauthorized | Invalid auth token |
+| 500 | Internal Server Error | Server-side issue |
 
 ### GET /employees/:userId
 
-**Description:**
+**Description:** Obtain employee information of this userId
 
-**Authorization:**
+**Authorization:** Admin Bearer token
 
-**Query Parameters:**
+**Request Parameters:**
+| Parameter | Type   | Description        | Required |
+| --------- | ------ | ------------------ | -------- |
+| userId    | number | ID of the employee | Yes      |
 
 **Response Example:**
+```json
+{
+  "id": 1,
+  "name": "John Doe",
+  "teamId": 2,
+  "teamName": "Engineering",
+  "verified": true
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid request parameters |
+| 401 | Unauthorized | Invalid auth token |
+| 404 | Not Found | Employee not found |
+| 500 | Internal Server Error | Server-side issue |
 
 ### PUT /employees/:userId/verify
 
-**Description:**
+**Description:** Verifies the specified employee, enabling their account.
 
-**Authorization:**
+**Authorization:** Admin Bearer token
 
 **Request Parameters:**
+| Parameter | Type   | Description        | Required |
+| --------- | ------ | ------------------ | -------- |
+| userId    | number | ID of the employee | Yes      |
 
 **Request Body:**
+*(none)*
 
 **Response Example:**
+```json
+{
+  "message": "Employee verified successfully.",
+  "line": "Message sent successfully"
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid request parameters |
+| 401 | Unauthorized | Invalid auth token |
+| 404 | Not Found | Employee not found or already verified |
+| 500 | Internal Server Error | Server-side issue |
+
 
 ### PUT /employees/:userId
 
-**Description:**
+**Description:** Updates the user's name and team.
 
-**Authorization:**
+**Authorization:** Admin Bearer token
 
 **Request Parameters:**
+| Parameter | Type   | Description        | Required |
+| --------- | ------ | ------------------ | -------- |
+| userId    | number | ID of the employee | Yes      |
 
 **Request Body:**
+```json
+{
+  "name": "New Name",
+  "teamId": 2
+}
+```
+| Field  | Type   | Description                   | Required |
+| ------ | ------ | ----------------------------- | -------- |
+| name   | string | New employee name (non-empty) | Yes      |
+| teamId | number | Team ID to assign (optional)  | No       |
 
 **Response Example:**
+```json
+{
+  "message": "Employee updated successfully.",
+  "line": "Message sent successfully."
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid request parameters |
+| 401 | Unauthorized | Invalid auth token |
+| 404 | Not Found | Employee not found |
+| 500 | Internal Server Error | Server-side issue |
 
 ### DELETE /employees/:userId
 
-**Description:**
+**Description:** Deletes the specified employee from the system.
 
-**Authorization:**
+**Authorization:** Admin Bearer token
 
-**Request Parameters:**
+**Request Parameters:** 
+| Parameter | Type   | Description        | Required |
+| --------- | ------ | ------------------ | -------- |
+| userId    | number | ID of the employee | Yes      |
 
 **Response Example:**
+```json
+{
+  "message": "Employee deleted successfully.",
+  "line": "Deletion success message sent to user."
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid request parameters |
+| 401 | Unauthorized | Invalid auth token |
+| 404 | Not Found | Employee not found |
+| 500 | Internal Server Error | Server-side issue |
 
 ## LINE Endpoints
 
 ### GET /line
 
-**Description:**
+**Description:** Generates and stores a random state for use with the LINE Login API (to prevent CSRF).
 
-**Authorization:**
+**Authorization:** None
 
 **Query Parameters:**
+*(none)*
 
 **Response Example:**
+```json
+{
+  "state": "rO3x92n8Q"
+}
+```
 
 **Error Codes:**
+| Code | Message               | Description                                                  |
+|------|-----------------------|--------------------------------------------------------------|
+| 500  | Internal Server Error | Retry limit exceeded while a unique state was not generated. |
 
 ### DELETE /line/:state
 
-**Description:**
+**Description:** Checks if the given state was previously generated by the server, and deletes it. Used to validate a returned state from LINE Login.
 
-**Authorization:**
+**Authorization:** None
 
 **Request Parameters:**
+| Parameter | Type   | Description             | Required |
+| --------- | ------ | ----------------------- | -------- |
+| state     | string | Previously issued state | Yes      |
+
 
 **Response Example:**
+```json
+{
+  "success": true
+}
+```
+
+If the state was not found:
+```json
+{
+  "success": false
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid request parameters |
+| 404 | Not Found | State not found |
+| 500 | Internal Server Error | Server-side issue |
+
 
 ### POST /line/auth
 
-**Description:**
+**Description:** Performs an access token exchange with the LINE Login API, then retrieves the user’s LINE profile.
 
-**Authorization:**
+**Authorization:** None
 
 **Request Body:**
+```json
+{
+  "code": "auth_code_from_line",
+  "redirect_uri": "https://your-callback-uri"
+}
+```
+| Field         | Type   | Description                                 | Required |
+| ------------- | ------ | ------------------------------------------- | -------- |
+| code          | string | Authorization code from LINE                | Yes      |
+| redirect\_uri | string | Redirect URI used in the initial LINE login | Yes      |
 
 **Response Example:**
+```json
+{
+  "profile": {
+    "userId": "U4af4980629...",
+    "displayName": "Example User",
+    "pictureUrl": "https://...",
+    "statusMessage": "Hello!"
+  }
+}
+```
 
 **Error Codes:**
+| Code | Message | Description |
+|------|---------|-------------|
+| 400 | Bad Request | Invalid request parameters |
+| 500 | Internal Server Error | Missing environment variables, or access token exchange failed |
+
 
 ## Reservation Endpoints
 
