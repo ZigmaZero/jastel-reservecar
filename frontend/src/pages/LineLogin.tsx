@@ -56,7 +56,7 @@ const LineLogin: React.FC = () => {
             <Container maxWidth="sm" sx={{ mt: 8 }}>
                 <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
                     <Typography variant="h5" align="center" gutterBottom>
-                        Welcome to ReserveCar Service!
+                        Welcome to Jastel ReserveCar!
                     </Typography>
                     <Button
                         id="line-login"
