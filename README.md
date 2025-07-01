@@ -1,13 +1,5 @@
 #project
 # ReserveCar System
-<p align="center">
-  <a href="https://github.com/ZigmaZero/reservecar">
-    <img src="https://img.shields.io/github/last-commit/ZigmaZero/reservecar" alt="Last Commit">
-  </a>
-  <a href="https://opensource.org/licenses/ISC">
-    <img src="https://img.shields.io/badge/License-ISC-blue.svg" alt="License: ISC">
-  </a>
-</p>
 
 In the work process, employees may require the usage of a vehicle to drive to off-site work locations. Employees who do not wish to use their personal car may choose to rent a company-provided car instead. The ReserveCar System is a platform to rent cars for users within the organization. By using a public LINE Official Account, users can easily access the system from the domestically popular LINE platform. The LINE platform links to an external webpage with a whitelist that users can request access to by linking their LINE account with their employee information. This way, users can conveniently access the car information and rental schedule and submit a car rental request form using the provided input method. The system also uses a relational database management system, which will allow the administrator to access and modify the car data easily and safely.
 ## How to Setup
@@ -66,6 +58,10 @@ LINE_CLIENT_ID = 1234567890
 LINE_MESSAGING_API_ACCESS_TOKEN = sD/tIAZMl...
 # The captured group ID
 LINE_LOGGING_GROUP_ID = 2572aCd0...
+# The Certificate key file name
+CERT_KEY = key.pem
+# The Certificate cert file name
+CERT_CERT = cert.pem
 ```
 ## Architecture
 This project is structured around a modern full-stack JavaScript/TypeScript architecture optimized for speed, scalability, and developer experience.
