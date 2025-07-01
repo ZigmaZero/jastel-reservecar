@@ -2,10 +2,24 @@ import app from "./app.js";
 import path from 'path'
 import fs from 'fs';
 import https from 'https'
+import http from 'http';
 
 const startHttpServer = () => {
   app.listen(port, '0.0.0.0', async () => {
     console.log(`Server listening on port ${port}`);
+  });
+};
+
+const startHttpRedirectServer = () => {
+  // Create a simple HTTP server that redirects to HTTPS
+  const redirectServer = http.createServer((req, res) => {
+    const httpsUrl = `https://${req.headers.host?.replace(':3000', ':8443')}${req.url}`;
+    res.writeHead(301, { 'Location': httpsUrl });
+    res.end();
+  });
+  
+  redirectServer.listen(port, '0.0.0.0', () => {
+    console.log(`HTTP redirect server listening on port ${port}, redirecting to HTTPS`);
   });
 };
 
@@ -18,7 +32,9 @@ if (process.env.NODE_ENV === 'production') {
     };
 
     https.createServer(options, app).listen(8443, () => {
-      console.log('HTTPS server running in production');
+      console.log('HTTPS server running in production on port 8443');
+      // Start HTTP redirect server after HTTPS is successfully running
+      startHttpRedirectServer();
     });
   }
   catch (error) {
