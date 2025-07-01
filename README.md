@@ -24,7 +24,7 @@ In the work process, employees may require the usage of a vehicle to drive to of
 (Note that the production setup steps haven't been verified yet.)
 1. Clone this repository
 2. Edit the last line of the Dockerfile to `CMD ["npm", "run", "start"]`
-3. Enter your TLS key and certificate as `database/key.pem` and `database/cert.pem`
+3. Enter your TLS key and certificate
 4. Create a directory named `database` in the working directory
 5. Provide the `.env` and `.env.backend` files according to the example files
 6. Build the container using `docker-compose build --no-cache
