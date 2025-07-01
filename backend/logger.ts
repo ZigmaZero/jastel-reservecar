@@ -1,7 +1,7 @@
 import pino from "pino";
 import path from "path";
 
-const logPath = path.resolve("database/server.log");
+const logPath = path.resolve("logs/server.log");
 
 const pi = pino.default;
 

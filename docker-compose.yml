@@ -12,6 +12,8 @@ services:
       - "3000:3000"
     volumes:
       - ./database:/app/backend/database
+      - ./logs:/app/backend/logs
+      - ./certs:/app/backend/certs
       - ./.env.backend:/app/backend/.env:ro
     env_file:
       - .env

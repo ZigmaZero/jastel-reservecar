@@ -36,8 +36,14 @@ COPY --from=frontend-builder /app/frontend/dist /app/backend/frontend/dist
 
 WORKDIR /app/backend
 
-# Database persistence
+# Database mount
 VOLUME /app/backend/database
+
+# Logs mount
+VOLUME /app/backend/logs
+
+# Certificates mount
+VOLUME /app/backend/certs
 
 # Mount point for secrets
 VOLUME /app/backend/.env
