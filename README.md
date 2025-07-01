@@ -66,6 +66,10 @@ LINE_CLIENT_ID = 1234567890
 LINE_MESSAGING_API_ACCESS_TOKEN = sD/tIAZMl...
 # The captured group ID
 LINE_LOGGING_GROUP_ID = 2572aCd0...
+# The Certificate key file name
+CERT_KEY = key.pem
+# The Certificate cert file name
+CERT_CERT = cert.pem
 ```
 ## Architecture
 This project is structured around a modern full-stack JavaScript/TypeScript architecture optimized for speed, scalability, and developer experience.
