@@ -1,2 +1,5 @@
+database
+certs
+logs
 ngrok.*
 .env*
