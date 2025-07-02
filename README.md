@@ -4,7 +4,7 @@
 In the work process, employees may require the usage of a vehicle to drive to off-site work locations. Employees who do not wish to use their personal car may choose to rent a company-provided car instead. The ReserveCar System is a platform to rent cars for users within the organization. By using a public LINE Official Account, users can easily access the system from the domestically popular LINE platform. The LINE platform links to an external webpage with a whitelist that users can request access to by linking their LINE account with their employee information. This way, users can conveniently access the car information and rental schedule and submit a car rental request form using the provided input method. The system also uses a relational database management system, which will allow the administrator to access and modify the car data easily and safely.
 ## How to Setup
 ### Preparation
-1. Install Docker
+1. Install Docker and Docker Compose.
 2. Create a LINE Official Account and enable usage of the LINE Messaging API
 3. Create a LINE Login channel and sync the created LINE Official Account
 4. In the LINE Login channel, add the following links as callback URLs:
