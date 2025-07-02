@@ -13,7 +13,8 @@ const startHttpServer = () => {
 const startHttpRedirectServer = () => {
   // Create a simple HTTP server that redirects to HTTPS
   const redirectServer = http.createServer((req, res) => {
-    const httpsUrl = `https://${req.headers.host?.replace(':3000', ':8443')}${req.url}`;
+    const host = req.headers.host?.replace(/:3000|:80$/, '') ?? '';
+    const httpsUrl = `https://${host}${req.url}`;
     res.writeHead(301, { 'Location': httpsUrl });
     res.end();
   });

@@ -4,3 +4,16 @@
 **/.env
 Dockerfile
 docker-compose.yml
+
+# Build artifacts that might interfere with native module compilation
+**/build/
+**/prebuilds/
+**/*.node
+**/.node-gyp/
+**/.npm/
+
+# Additional files that could cause issues
+.git/
+.gitignore
+README.md
+docs/

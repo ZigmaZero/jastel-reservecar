@@ -9,7 +9,8 @@
     "build": "npm run clean && tsc",
     "stage": "npm run build && cross-env NODE_ENV=staging node dist/server.js",
     "start": "npm run build && cross-env NODE_ENV=production node dist/server.js",
-    "test": "npm run build && cross-env NODE_ENV=test node run_tests.js"
+    "test": "npm run build && cross-env NODE_ENV=test node run_tests.js",
+    "postinstall": "npm rebuild better-sqlite3"
   },
   "author": "",
   "license": "ISC",

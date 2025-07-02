@@ -26,13 +26,19 @@ FROM node:22.16.0 AS backend-builder
 WORKDIR /app
 
 # Add native build tools
-RUN apt-get update && apt-get install -y python3 make g++
+RUN apt-get update && apt-get install -y python3 make g++ build-essential
+
+# Set environment variables for better-sqlite3 compilation
+ENV PYTHON=/user/bin/python3
 
 # Clone the backend repository
 COPY backend backend
 
 # Install backend dependencies
 RUN cd backend && npm install
+
+# Explicitly rebuild better-sqlite3 for the container platform
+RUN cd backend && npm rebuild better-sqlite3
 
 # Copy the built frontend files into the backend directory
 COPY --from=frontend-builder /app/frontend/dist /app/backend/frontend/dist
@@ -52,5 +58,6 @@ VOLUME /app/backend/certs
 VOLUME /app/backend/.env
 
 EXPOSE 3000
+EXPOSE 8443
 
-CMD ["npm", "run", "stage"]
+CMD ["npm", "run", "start"]
