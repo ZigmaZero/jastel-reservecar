@@ -25,6 +25,9 @@ FROM node:22.16.0 AS backend-builder
 
 WORKDIR /app
 
+# Add native build tools
+RUN apt-get update && apt-get install -y python3 make g++
+
 # Clone the backend repository
 COPY backend backend
 
