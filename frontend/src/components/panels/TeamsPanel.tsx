@@ -176,7 +176,7 @@ const TeamsPanel: FC<TeamsPanelProps> = ({ token }) => {
   return (
     <Paper sx={{ p: 3, mt: 2 }} variant="outlined">
       <Typography variant="h5" gutterBottom>
-        Teams
+        ส่วนงาน
       </Typography>
       {isAddOpen && (
         <AddTeamsModal

@@ -20,7 +20,7 @@ const Menu = () => {
         <Container maxWidth="sm" sx={{ mt: 8 }}>
             <Box textAlign="center">
                 <Typography variant="h4" gutterBottom>
-                    เว็บแอปจองรถ Jastel
+                    Jastel ReserveCar
                 </Typography>
                 <Typography variant="body1">
                     ยินดีต้อนรับ คุณ {user?.name}

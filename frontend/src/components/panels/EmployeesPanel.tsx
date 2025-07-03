@@ -194,7 +194,7 @@ const EmployeesPanel: FC<EmployeesPanelProps> = ({ token }) => {
   return (
     <Paper sx={{ p: 3, mt: 2 }} variant="outlined">
       <Typography variant="h5" gutterBottom>
-        Employees
+        ผู้ใช้งาน
       </Typography>
       <Box sx={{ height: 500, width: "100%" }}>
         <DataGrid

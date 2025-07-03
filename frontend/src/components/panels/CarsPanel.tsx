@@ -199,7 +199,7 @@ const CarsPanel: FC<CarsPanelProps> = ({ token }) => {
   return (
     <Paper sx={{ p: 3, mt: 2 }} variant="outlined">
       <Typography variant="h5" gutterBottom>
-        Cars
+        รถ
       </Typography>
       {isAddOpen && (
         <AddCarsModal

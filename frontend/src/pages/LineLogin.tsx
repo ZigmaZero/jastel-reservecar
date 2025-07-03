@@ -56,7 +56,7 @@ const LineLogin: React.FC = () => {
             <Container maxWidth="sm" sx={{ mt: 8 }}>
                 <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
                     <Typography variant="h5" align="center" gutterBottom>
-                        ยินดีต้อนรับสู่ระบบจองรถ Jastel
+                        ยินดีต้อนรับสู่ระบบ Jastel ReserveCar
                     </Typography>
                     <Button
                         id="line-login"

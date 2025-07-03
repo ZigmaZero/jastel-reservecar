@@ -255,7 +255,7 @@ const JobsPanel: FC<JobsPanelProps> = ({ token }) => {
   return (
     <Paper sx={{ p: 3, mt: 2 }} variant="outlined">
       <Typography variant="h5" gutterBottom>
-        Jobs
+        งานจองรถ
       </Typography>
       {isExportOpen && (
         <ExportJobsModal
