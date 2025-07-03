@@ -26,6 +26,8 @@ const LineLoginCallback: React.FC = () => {
     const error_description = searchParams.get('error_description');
     const navigate = useNavigate();
 
+    const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI as string;
+
     const [registered, setRegistered] = useState(true);
     const [lineId, setLineId] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -58,8 +60,8 @@ const LineLoginCallback: React.FC = () => {
 
         const thisUrl =
             action === "checkin" || action === "checkout"
-                ? `https://splendid-sheep-wrongly.ngrok-free.app/line/callback?action=${action}`
-                : `https://splendid-sheep-wrongly.ngrok-free.app/line/callback`;
+                ? `${REDIRECT_URI}?action=${action}`
+                : `${REDIRECT_URI}`;
 
         authToProfile(authorizationCode, thisUrl)
             .then((profile) => {
