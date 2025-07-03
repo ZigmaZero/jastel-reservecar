@@ -123,17 +123,14 @@ const LineLoginCallback: React.FC = () => {
                 ) : (
                     <Paper elevation={3} sx={{ p: 4 }}>
                         <Typography variant="h5" gutterBottom>
-                            Register Page
+                            ลงทะเบียนผู้ใช้
                         </Typography>
                         <Typography variant="body1" gutterBottom>
-                            You are not registered with the system.
-                        </Typography>
-                        <Typography variant="body2" gutterBottom>
-                            Please enter your full name to register.
+                            คุณยังไม่ได้ลงทะเบียนผู้ใช้ กรุณากรอกชื่อเต็มของคุณเพื่อทำการลงทะเบียน
                         </Typography>
                         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
                             <TextField
-                                label="Full Name"
+                                label="ชื่อ-นามสกุล"
                                 id="username"
                                 name="username"
                                 fullWidth
@@ -149,7 +146,7 @@ const LineLoginCallback: React.FC = () => {
                                 fullWidth
                                 sx={{ mt: 2 }}
                             >
-                                {isSubmitting ? <CircularProgress size={24} /> : "Register"}
+                                {isSubmitting ? <CircularProgress size={24} /> : "ลงทะเบียน"}
                             </Button>
                         </Box>
                     </Paper>

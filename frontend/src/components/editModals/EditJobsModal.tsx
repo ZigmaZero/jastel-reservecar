@@ -39,7 +39,7 @@ const EditJobsModal: React.FC<EditModalProps> = ({ item, onClose, onEdit }) => {
 
   return (
     <Dialog open onClose={onClose}>
-      <DialogTitle>Edit Reservation</DialogTitle>
+      <DialogTitle>แก้ไขเวลางาน</DialogTitle>
       <form onSubmit={handleSubmit}>
         <DialogContent>
           <Stack spacing={2}>

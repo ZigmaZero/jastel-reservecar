@@ -65,12 +65,12 @@ const AddCarsModal: React.FC<AddCarsModalProps> = ({ onClose, onAdd }) => {
 
   return (
     <Dialog open onClose={onClose}>
-      <DialogTitle>Add Car</DialogTitle>
+      <DialogTitle>เพิ่มรถ</DialogTitle>
       <form onSubmit={handleSubmit}>
         <DialogContent>
           <Stack spacing={2}>
             <TextField
-              label="Plate No."
+              label="เลขทะเบียนรถ"
               name="plateNumber"
               value={formData.plateNumber}
               onChange={handleChangePlate}
@@ -78,16 +78,16 @@ const AddCarsModal: React.FC<AddCarsModalProps> = ({ onClose, onAdd }) => {
               fullWidth
             />
             <FormControl fullWidth required>
-              <InputLabel id="team-label">Team</InputLabel>
+              <InputLabel id="team-label">ส่วนงาน</InputLabel>
               <Select
                 labelId="team-label"
                 name="teamId"
                 value={formData.teamId?.toString() ?? ""}
-                label="Team"
+                label="ส่วนงาน"
                 onChange={handleChangeTeam}
               >
                 <MenuItem value="">
-                  <em>Select a team</em>
+                  <em>เลือกส่วนงาน</em>
                 </MenuItem>
                 {teams.map(team => (
                   <MenuItem key={team.id?.toString()} value={team.id?.toString()}>

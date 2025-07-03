@@ -54,7 +54,7 @@ const Checkin = () => {
         }).catch((error) => {
           console.error("Error fetching cars:", error);
           setCars([]); // Clear car options on error
-          alert("Failed to load cars. Please try again later.");
+          alert("เกิดข้อผิดพลาดในการดึงข้อมูลรถ กรุณาลองใหม่ภายหลัง");
         });
       setCarId(""); // Reset car selection
     } else {
@@ -67,7 +67,7 @@ const Checkin = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) {
-      alert("You have been logged out. Please log in again.");
+      alert("คุณต้องเข้าสู่ระบบก่อนทำการ Checkin");
       navigate("/login");
       return;
     }
@@ -77,7 +77,7 @@ const Checkin = () => {
       })
       .catch((error) => {
         console.error("Checkin failed:", error);
-        alert("Checkin failed. Please try again later.");
+        alert("ไม่สามารถทำการ Checkin ได้ กรุณาลองใหม่ภายหลัง");
       });
   };
 

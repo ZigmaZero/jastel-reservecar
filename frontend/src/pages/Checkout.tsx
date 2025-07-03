@@ -36,7 +36,7 @@ const Checkout = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) {
-      alert("You must be logged in to checkout.");
+      alert("คุณต้องเข้าสู่ระบบก่อนทำการ Checkout");
       return;
     }
     userCheckout(jobId as number, token)
@@ -45,7 +45,7 @@ const Checkout = () => {
       })
       .catch((error) => {
         console.error("Checkout error:", error);
-        alert("An error occurred during checkout. Please try again later.");
+        alert("ไม่สามารถทำการ Checkout ได้ กรุณาลองใหม่ภายหลัง");
       });
   };
 

@@ -40,12 +40,12 @@ const EditTeamsModal: React.FC<EditModalProps> = ({ item, onClose, onEdit }) => 
 
   return (
     <Dialog open onClose={onClose}>
-      <DialogTitle>Edit Team</DialogTitle>
+      <DialogTitle>แก้ไขข้อมูลส่วนงาน</DialogTitle>
       <form onSubmit={handleSubmit}>
         <DialogContent>
           <Stack spacing={2}>
             <TextField
-              label="Name"
+              label="ชื่อส่วนงาน"
               name="name"
               value={formData.name || ""}
               onChange={handleChange}

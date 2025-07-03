@@ -114,7 +114,7 @@ const Dashboard: React.FC = () => {
       <Container maxWidth="md" sx={{ mt: 6 }}>
         <Paper elevation={3} sx={{ p: 4 }}>
           <Typography variant="subtitle1" gutterBottom>
-            Welcome {admin?.name}
+            ยินดีต้อนรับ {admin?.name}
           </Typography>
           <Box display="flex" justifyContent="center" mb={3}>
             <ButtonGroup variant="outlined" color="primary">
@@ -122,25 +122,25 @@ const Dashboard: React.FC = () => {
                 color={activePanel === "Jobs" ? "primary" : "secondary"}
                 onClick={() => setActivePanel("Jobs")}
               >
-                Jobs
+                งานจองรถ
               </Button>
               <Button
                 color={activePanel === "Cars" ? "primary" : "secondary"}
                 onClick={() => setActivePanel("Cars")}
               >
-                Cars
+                รถ
               </Button>
               <Button
                 color={activePanel === "Employees" ? "primary" : "secondary"}
                 onClick={() => setActivePanel("Employees")}
               >
-                Employees
+                ผู้ใช้งาน
               </Button>
               <Button
                 color={activePanel === "Teams" ? "primary" : "secondary"}
                 onClick={() => setActivePanel("Teams")}
               >
-                Teams
+                ส่วนงาน
               </Button>
             </ButtonGroup>
           </Box>

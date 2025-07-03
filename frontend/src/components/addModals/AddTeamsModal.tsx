@@ -34,12 +34,12 @@ const AddTeamsModal: React.FC<AddTeamsModalProps> = ({ onClose, onAdd }) => {
 
   return (
     <Dialog open onClose={onClose}>
-      <DialogTitle>Add Team</DialogTitle>
+      <DialogTitle>เพิ่มส่วนงาน</DialogTitle>
       <form onSubmit={handleSubmit}>
         <DialogContent>
           <Stack spacing={2}>
             <TextField
-              label="Name"
+              label="ชื่อส่วนงาน"
               name="name"
               value={formData.name}
               onChange={handleChange}

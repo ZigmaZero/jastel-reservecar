@@ -49,7 +49,7 @@ const EditEmployeesModal: React.FC<EditEmployeesModalProps> = ({ item, onClose, 
       })
       .catch((error) => {
         console.error("Error fetching teams:", error);
-        alert("Failed to load teams. Please try again later.");
+        alert("ไม่สามารถโหลดส่วนงานได้ กรุณาลองใหม่ภายหลัง");
         onClose();
       });
     // eslint-disable-next-line
@@ -92,12 +92,12 @@ const EditEmployeesModal: React.FC<EditEmployeesModalProps> = ({ item, onClose, 
 
   return (
     <Dialog open onClose={onClose}>
-      <DialogTitle>Edit Employee</DialogTitle>
+      <DialogTitle>แก้ไขข้อมูลผู้ใช้งาน</DialogTitle>
       <form onSubmit={handleSubmit}>
         <DialogContent>
           <Stack spacing={2}>
             <TextField
-              label="Name"
+              label="ชื่อผู้ใช้งาน"
               name="name"
               value={formData.name}
               onChange={handleChangeName}
@@ -113,22 +113,22 @@ const EditEmployeesModal: React.FC<EditEmployeesModalProps> = ({ item, onClose, 
                   disabled={originallyVerified}
                 />
               }
-              label="Verified"
+              label="การรับรอง"
             />
             <Typography variant="caption" color="text.secondary">
-              (Once you verify someone, you cannot unverify them.)
+              (ผู้ใช้งานที่ได้รับการรับรองไม่สามารถเปลี่ยนแปลงสถานะการรับรองได้)
             </Typography>
             <FormControl fullWidth required>
-              <InputLabel id="team-label">Team</InputLabel>
+              <InputLabel id="team-label">ส่วนงาน</InputLabel>
               <Select
                 labelId="team-label"
                 name="teamId"
                 value={formData.teamId?.toString() ?? ""}
-                label="Team"
+                label="ส่วนงาน"
                 onChange={handleChangeTeam}
               >
                 <MenuItem value="">
-                  <em>Select a team</em>
+                  <em>เลือกส่วนงาน</em>
                 </MenuItem>
                 {teams.map(team => (
                   <MenuItem key={team.id?.toString()} value={team.id?.toString()}>

@@ -20,13 +20,10 @@ const Menu = () => {
         <Container maxWidth="sm" sx={{ mt: 8 }}>
             <Box textAlign="center">
                 <Typography variant="h4" gutterBottom>
-                    Menu Page
+                    เว็บแอปจองรถ Jastel
                 </Typography>
                 <Typography variant="body1">
-                    Welcome to the Menu page!
-                </Typography>
-                <Typography variant="body2" gutterBottom>
-                    You are currently logged in as {user?.name}.
+                    ยินดีต้อนรับ คุณ {user?.name}
                 </Typography>
                 <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 3 }}>
                     <Button

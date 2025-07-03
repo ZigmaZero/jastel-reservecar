@@ -34,13 +34,13 @@ const ExportJobsModal: React.FC<ExportJobsModalProps> = ({ onClose, onExport }) 
         <Drawer anchor="top" open onClose={onClose}>
             <Box sx={{ width: "100%", maxWidth: 500, mx: "auto", p: 3 }}>
                 <Typography variant="h6" gutterBottom>
-                    Export Reservations
+                    Export ข้อมูลงาน
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
                 <form onSubmit={handleSubmit}>
                     <Stack direction={"row"} spacing={2}>
                         <DateTimePicker
-                            label="Start Time"
+                            label="จากเวลา"
                             views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
                             value={formData.startTime}
                             onChange={value => setFormData(prev => ({ ...prev, startTime: value }))}
@@ -52,7 +52,7 @@ const ExportJobsModal: React.FC<ExportJobsModalProps> = ({ onClose, onExport }) 
                             }}
                         />
                         <DateTimePicker
-                            label="End Time"
+                            label="ถึงเวลา"
                             views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
                             value={formData.endTime}
                             onChange={value => setFormData(prev => ({ ...prev, endTime: value }))}

@@ -22,13 +22,13 @@ const CheckinSuccess = () => {
             <Container maxWidth="sm" sx={{ mt: 8 }}>
                 <Box textAlign="center">
                     <Typography variant="h4" gutterBottom>
-                        Checkin Success!
+                        Checkin
                     </Typography>
                     <Typography variant="body1" gutterBottom>
-                        Thank you for checking in using the system.
+                        การ Checkin เสร็จสมบูรณ์แล้ว
                     </Typography>
                     <Typography variant="body2" gutterBottom>
-                        Please don't forget to checkout after you're done.
+                        กรุณาทำการ Checkout เมื่อเสร็จสิ้นการใช้งานรถ
                     </Typography>
                     <Button
                         variant="contained"
@@ -36,7 +36,7 @@ const CheckinSuccess = () => {
                         sx={{ mt: 3 }}
                         onClick={() => navigate("/checkout")}
                     >
-                        Proceed to Checkout
+                        Checkout
                     </Button>
                 </Box>
             </Container>

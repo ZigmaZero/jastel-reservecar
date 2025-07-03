@@ -23,13 +23,13 @@ const CheckoutSuccess = () => {
         <Container maxWidth="sm" sx={{ mt: 8 }}>
             <Box textAlign="center">
                 <Typography variant="h4" gutterBottom>
-                    Checkout Success!
+                    Checkout
                 </Typography>
                 <Typography variant="body1">
-                    Thank you for using the system.
+                    การ Checkout เสร็จสมบูรณ์แล้ว
                 </Typography>
                 <Typography variant="body2" gutterBottom>
-                    Please come again.
+                    ขอบคุณที่ใช้ระบบจองรถ Jastel
                 </Typography>
             </Box>
         </Container>
