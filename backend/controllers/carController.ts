@@ -137,7 +137,7 @@ export function carGetPaginatedController() {
     }
 
     try {
-      const total = getCarsCount();
+      const total = getCarsCount(filterField, filterOp, filterValue);
       const cars = getCars(pageSize, offset, sortField, sortOrder, filterField, filterOp, filterValue);
 
       res.status(200).json({

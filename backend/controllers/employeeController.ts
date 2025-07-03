@@ -97,7 +97,7 @@ export function employeeGetPaginatedController() {
     }
 
     try {
-      const total = getEmployeesCount();
+      const total = getEmployeesCount(filterField, filterOp, filterValue);
       const employees = getEmployees(pageSize, offset, sortField, sortOrder, filterField, filterOp, filterValue);
 
       res.status(200).json({

@@ -65,10 +65,43 @@ export function getEmployees(
   return stmt.all(...params, pageSize, offset);
 }
 
-export function getEmployeesCount(): number {
-  const stmt = db.prepare<[], Count>('SELECT COUNT(*) as count FROM Employee WHERE deletedAt IS NULL');
-  const count = stmt.get();
-  return count ? count.count : 0;
+export function getEmployeesCount(
+  filterField?: "id" | "teamId" | "teamName" | "verified" | "name",
+  filterOp?: "=" | "is" | "contains",
+  filterValue?: string
+): number {
+  let filterClause = "Employee.deletedAt IS NULL";
+  let params: any[] = [];
+
+  if (filterField) {
+    if ((filterField === "id" || filterField === "teamId") && filterOp === "=" && filterValue !== undefined && filterValue !== "") {
+      if (filterField === "id") {
+        filterClause += " AND Employee.userId = ?";
+      } else {
+        filterClause += " AND Employee.teamId = ?";
+      }
+      params.push(Number(filterValue));
+    } else if ((filterField === "name" || filterField === "teamName") && filterOp === "contains" && filterValue !== undefined && filterValue !== "") {
+      if (filterField === "name") {
+        filterClause += " AND Employee.name LIKE ?";
+      } else {
+        filterClause += " AND Team.name LIKE ?";
+      }
+      params.push(`%${filterValue}%`);
+    } else if (filterField === "verified" && filterOp === "is") {
+      if (filterValue === "true") {
+        filterClause += " AND Employee.verified = 1";
+      } else if (filterValue === "false") {
+        filterClause += " AND Employee.verified = 0";
+      }
+    }
+  }
+
+  const stmt = db.prepare<any[], Count>(
+    `SELECT COUNT(*) as count FROM Employee LEFT JOIN Team ON Employee.teamId = Team.teamId WHERE ${filterClause}`
+  );
+  const count = stmt.get(...params);
+  return count ? (count as any).count : 0;
 }
 
 export function getEmployeesInTeam(teamId: number): EmployeeExternal[] {

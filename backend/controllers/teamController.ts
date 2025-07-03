@@ -203,7 +203,7 @@ export function teamGetPaginatedController() {
     }
 
     try {
-      const total = getTeamsCount();
+      const total = getTeamsCount(filterField, filterOp, filterValue);
       const teams = getTeamsPaginated(pageSize, offset, sortField, sortOrder, filterField, filterOp, filterValue);
 
       res.status(200).json({

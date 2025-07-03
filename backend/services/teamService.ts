@@ -51,10 +51,29 @@ export function getTeamsPaginated(
   }));
 }
 
-export function getTeamsCount(): number {
-  const stmt = db.prepare<[], Count>('SELECT COUNT(*) as count FROM Team WHERE deletedAt IS NULL');
-  const count = stmt.get();
-  return count ? count.count : 0;
+export function getTeamsCount(
+  filterField?: "id" | "name",
+  filterOp?: "=" | "contains",
+  filterValue?: string
+): number {
+  let filterClause = "deletedAt IS NULL";
+  let params: any[] = [];
+
+  if (filterField && filterValue !== undefined && filterValue !== "") {
+    if (filterField === "id" && filterOp === "=") {
+      filterClause += " AND teamId = ?";
+      params.push(Number(filterValue));
+    } else if (filterField === "name" && filterOp === "contains") {
+      filterClause += " AND name LIKE ?";
+      params.push(`%${filterValue}%`);
+    }
+  }
+
+  const stmt = db.prepare<any[], Count>(
+    `SELECT COUNT(*) as count FROM Team WHERE ${filterClause}`
+  );
+  const count = stmt.get(...params);
+  return count ? (count as any).count : 0;
 }
 
 export function getTeamById(teamId: number): TeamExternal | undefined {

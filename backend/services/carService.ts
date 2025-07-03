@@ -55,9 +55,34 @@ export function getCars(
   return stmt.all(...params, pageSize, offset);
 }
 
-export function getCarsCount(): number {
-  const stmt = db.prepare<[], Count>('SELECT COUNT(*) as count FROM Car WHERE deletedAt IS NULL');
-  const count = stmt.get();
+export function getCarsCount(
+  filterField?: "id" | "plateNumber" | "teamId" | "teamName",
+  filterOp?: "=" | "contains",
+  filterValue?: string
+): number {
+  let filterClause = "Car.deletedAt IS NULL";
+  let params: any[] = [];
+
+  if (filterField && filterValue !== undefined && filterValue !== "") {
+    if (filterField === "id" && filterOp === "=") {
+      filterClause += " AND Car.carId = ?";
+      params.push(Number(filterValue));
+    } else if (filterField === "teamId" && filterOp === "=") {
+      filterClause += " AND Car.teamId = ?";
+      params.push(Number(filterValue));
+    } else if (filterField === "plateNumber" && filterOp === "contains") {
+      filterClause += " AND Car.plateNumber LIKE ?";
+      params.push(`%${filterValue}%`);
+    } else if (filterField === "teamName" && filterOp === "contains") {
+      filterClause += " AND Team.name LIKE ?";
+      params.push(`%${filterValue}%`);
+    }
+  }
+
+  const stmt = db.prepare<any[], Count>(
+    `SELECT COUNT(*) as count FROM Car LEFT JOIN Team ON Car.teamId = Team.teamId WHERE ${filterClause}`
+  );
+  const count = stmt.get(...params);
   return count ? count.count : 0;
 }
 

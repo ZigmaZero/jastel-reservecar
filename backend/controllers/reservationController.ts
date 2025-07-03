@@ -183,7 +183,7 @@ export function reservationGetPaginatedController() {
     }
 
     try {
-      const total = getReservationsCount();
+      const total = getReservationsCount(filterField, filterOp, filterValue);
       const reservations = getReservations(pageSize, offset, sortField, sortOrder, filterField, filterOp, filterValue);
 
       res.status(200).json({

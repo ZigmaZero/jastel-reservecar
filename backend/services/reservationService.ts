@@ -137,10 +137,82 @@ export function getReservationsBetweenTime(startTime: Date, endTime: Date): Rese
   return stmt.all(startTime.toISOString(), endTime.toISOString());
 }
 
-export function getReservationsCount(): number {
-  const stmt = db.prepare<[], Count>('SELECT COUNT(*) as count FROM Reservation');
-  const count = stmt.get();
-  return count ? count.count : 0;
+export function getReservationsCount(
+  filterField?: "id" | "userId" | "user" | "carId" | "car" | "description" | "checkinTime" | "checkoutTime",
+  filterOp?: "=" | "contains" | "onOrBefore" | "onOrAfter" | "isEmpty" | "isNotEmpty",
+  filterValue?: string
+): number {
+  let filterClause = "1=1";
+  let params: any[] = [];
+
+  if (filterField && filterOp) {
+    if (
+      (filterField === "id" || filterField === "userId" || filterField === "carId") &&
+      filterOp === "=" &&
+      filterValue !== undefined &&
+      filterValue !== ""
+    ) {
+      const column =
+        filterField === "id"
+          ? "Reservation.reservationId"
+          : filterField === "userId"
+          ? "Reservation.userId"
+          : "Reservation.carId";
+      filterClause += ` AND ${column} = ?`;
+      params.push(Number(filterValue));
+    } else if (
+      (filterField === "user" || filterField === "car" || filterField === "description") &&
+      filterOp === "contains" &&
+      filterValue !== undefined &&
+      filterValue !== ""
+    ) {
+      const column =
+        filterField === "user"
+          ? "Employee.name"
+          : filterField === "car"
+          ? "Car.plateNumber"
+          : "Reservation.description";
+      filterClause += ` AND ${column} LIKE ?`;
+      params.push(`%${filterValue}%`);
+    } else if (
+      filterField === "checkinTime" &&
+      (filterOp === "onOrBefore" || filterOp === "onOrAfter") &&
+      filterValue !== undefined &&
+      filterValue !== ""
+    ) {
+      const column = "Reservation.checkinTime";
+      if (filterOp === "onOrBefore") {
+        filterClause += ` AND ${column} <= ?`;
+      } else {
+        filterClause += ` AND ${column} >= ?`;
+      }
+      params.push(new Date(filterValue).toISOString());
+    } else if (filterField === "checkoutTime") {
+      const column = "Reservation.checkoutTime";
+      if (
+        (filterOp === "onOrBefore" || filterOp === "onOrAfter") &&
+        filterValue !== undefined &&
+        filterValue !== ""
+      ) {
+        if (filterOp === "onOrBefore") {
+          filterClause += ` AND ${column} <= ?`;
+        } else {
+          filterClause += ` AND ${column} >= ?`;
+        }
+        params.push(new Date(filterValue).toISOString());
+      } else if (filterOp === "isEmpty") {
+        filterClause += ` AND ${column} IS NULL`;
+      } else if (filterOp === "isNotEmpty") {
+        filterClause += ` AND ${column} IS NOT NULL`;
+      }
+    }
+  }
+
+  const stmt = db.prepare<any[], Count>(
+    `SELECT COUNT(*) as count FROM Reservation LEFT JOIN Employee ON Reservation.userId = Employee.userId LEFT JOIN Car ON Reservation.carId = Car.carId WHERE ${filterClause}`
+  );
+  const count = stmt.get(...params);
+  return count ? (count as any).count : 0;
 }
 
 export function createReservation(userId: number, carId: number, description: string, checkinTime: string): Database.RunResult {
