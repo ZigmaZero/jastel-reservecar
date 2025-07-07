@@ -16,4 +16,4 @@ export function employeeVerifyMessageTH(user: EmployeeExternal): string {
 ขอบคุณที่ใช้บริการ Jastel ReserveCar.`;
 }
 
-export default employeeVerifyMessageEN;
+export default employeeVerifyMessageTH;
