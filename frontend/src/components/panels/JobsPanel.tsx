@@ -118,8 +118,9 @@ const JobsPanel: FC<JobsPanelProps> = ({ token }) => {
     // Combine headers and rows
     const csvContent = [headers.join(","), ...rows].join("\r\n");
 
-    // Create a blob and trigger download
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    // Add UTF-8 BOM for proper encoding in Excel and other apps
+    const bom = "\uFEFF";
+    const blob = new Blob([bom + csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement("a");
