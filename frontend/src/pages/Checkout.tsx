@@ -47,6 +47,13 @@ const Checkout = () => {
     });
   }, []);
 
+  const handleJobChange = (e: any) => {
+    const selectedId = Number(e.target.value);
+    setJobId(selectedId);
+    const selectedJob = jobs.find(j => j.id === selectedId);
+    setDescription(selectedJob ? selectedJob.description : "");
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) {
@@ -79,7 +86,7 @@ const Checkout = () => {
                 id="job"
                 value={jobId}
                 label="เลขงาน"
-                onChange={(e) => setJobId(Number(e.target.value))}
+                onChange={handleJobChange}
               >
                 {jobs.map((j) => (
                   <MenuItem key={j.id} value={j.id} sx={{
