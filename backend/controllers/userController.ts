@@ -4,7 +4,7 @@ import jobCheckinMessage from "../messages/jobCheckinMessage.js";
 import { getCarsByTeam, getCarById } from "../services/carService.js";
 import { getEmployeeById, getEmployeeByLineId, createEmployee } from "../services/employeeService.js";
 import { messageGroup } from "../services/lineService.js";
-import { getReservationByUser, getReservationById, checkoutReservation, createReservation } from "../services/reservationService.js";
+import { getReservationByUser, getReservationById, checkoutReservation, createReservation, updateReservationDescription } from "../services/reservationService.js";
 import generateAccessToken from "../utils/generateAccessToken.js";
 import { Request, Response } from "express";
 
@@ -68,7 +68,7 @@ export function userGetCarsController() {
 
 export function userCheckoutController() {
   return (req: AuthenticatedRequest, res: Response) => {
-    const { reservationId } = req.body;
+    const { reservationId, description } = req.body;
     const userId = req.employee?.userId;
     if (!userId) {
       res.status(401).json({ error: 'Unauthorized' });
@@ -103,6 +103,10 @@ export function userCheckoutController() {
     }
 
     try {
+      // If description is provided and different, update it before checkout
+      if (typeof description === 'string' && description.trim() !== '' && description !== reservation.description) {
+        updateReservationDescription(reservationId, description);
+      }
       checkoutReservation(reservationId, checkoutTime);
       res.status(200).json({ message: 'Checkout successful.' });
     } catch (error) {

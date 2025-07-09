@@ -278,3 +278,8 @@ export function updateReservation(
   );
   return stmt.run(checkinTime, checkoutTime, reservationId);
 }
+
+export function updateReservationDescription(reservationId: number, description: string): Database.RunResult {
+  const stmt = db.prepare('UPDATE Reservation SET description = ? WHERE reservationId = ?');
+  return stmt.run(description, reservationId);
+}

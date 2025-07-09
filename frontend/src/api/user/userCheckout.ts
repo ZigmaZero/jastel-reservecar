@@ -2,9 +2,10 @@ import axios from 'axios';
 
 export default function userCheckout(
     jobId: number,
-    token: string
+    token: string,
+    description?: string
 ): Promise<void> {
-    return axios.post(`/user/checkout`, { reservationId: jobId }, {
+    return axios.post(`/user/checkout`, { reservationId: jobId, description }, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,

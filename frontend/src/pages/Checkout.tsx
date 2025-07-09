@@ -14,13 +14,15 @@ import {
   Select,
   InputLabel,
   FormControl,
-  Paper
+  Paper,
+  TextField
 } from "@mui/material";
 
 const Checkout = () => {
   const { user, token } = useUser();
   const [jobId, setJobId] = useState<number | "">("");
   const [jobs, setJobs] = useState<ReservationExternal[]>([]);
+  const [description, setDescription] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,7 +53,7 @@ const Checkout = () => {
       alert("คุณต้องเข้าสู่ระบบก่อนทำการ Checkout");
       return;
     }
-    userCheckout(jobId as number, token)
+    userCheckout(jobId as number, token, description)
       .then(() => {
         navigate("/checkout-success");
       })
@@ -98,6 +100,13 @@ const Checkout = () => {
                 ))}
               </Select>
             </FormControl>
+            <TextField
+              fullWidth
+              label="แก้ไขรายละเอียดงาน (ถ้าต้องการ)"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              sx={{ mb: 3 }}
+            />
             <Button
               type="submit"
               variant="contained"
