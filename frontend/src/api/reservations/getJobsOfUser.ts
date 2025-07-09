@@ -14,12 +14,7 @@ export default function getJobsOfUser(token: string): Promise<ReservationExterna
         return response.data.reservations as ReservationExternal[];
     }
     ).catch((error) => {
-        if (error.response && error.response.status !== 400 && error.response.status !== 401) {
-            console.error("Unexpected error status:", error.response.status, error.response.data);
-            throw new Error("An unexpected error occurred. Please try again later.");
-        } else {
-            throw error;
-        }
+        throw error;
     }
     );
 }

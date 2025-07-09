@@ -28,8 +28,20 @@ const Checkout = () => {
       navigate("/line/access");
       return;
     }
-    getJobsOfUser(token).then((jobsList) => {
+    
+    getJobsOfUser(token)
+    .then((jobsList) => {
       setJobs(jobsList);
+    })
+    .catch((error) => {
+      if (error.response && error.response.status === 401) {
+        alert("คุณต้องเข้าสู่ระบบก่อนทำการ Checkout")
+        navigate("/login")
+      } else if (error.response && error.response.status !== 404 && error.response.status !== 400) {
+        console.error("Unexpected error status:", error.response.status, error.response.data);
+        alert("เกิดข้อผิดพลาดในการดึงข้อมูลงาน กรุณาลองใหม่ภายหลัง");
+      }
+      setJobs([]); // Clear job options on error
     });
   }, []);
 

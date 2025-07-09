@@ -22,10 +22,6 @@ export default function adminLogin(name: string, password: string): Promise<{
         }
     })
     .catch((error) => {
-        if (error.response && error.response.status !== 400 && error.response.status !== 401) {
-            throw new Error(`Unexpected error status:, error.response.status, error.response.data`);
-        }
-        else
-            throw error;
+        throw error;
     });
 }

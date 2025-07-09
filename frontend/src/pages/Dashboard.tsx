@@ -1,10 +1,10 @@
-import React, { lazy, Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAdmin } from "../contexts/AdminContext";
 import { useNavigate } from "react-router-dom";
-const CarsPanel = lazy(() => import("../components/panels/CarsPanel"));
-const JobsPanel = lazy(() => import("../components/panels/JobsPanel"));
-const EmployeesPanel = lazy(() => import("../components/panels/EmployeesPanel"));
-const TeamsPanel = lazy(() => import("../components/panels/TeamsPanel"));
+import CarsPanel from "../components/panels/CarsPanel";
+import JobsPanel from "../components/panels/JobsPanel";
+import EmployeesPanel from "../components/panels/EmployeesPanel";
+import TeamsPanel from "../components/panels/TeamsPanel";
 
 import {
   Container,
@@ -145,20 +145,10 @@ const Dashboard: React.FC = () => {
             </ButtonGroup>
           </Box>
           <Box>
-            <Suspense
-              fallback={
-                <Paper sx={{ p: 3, mt: 2 }} variant="outlined">
-                  <Typography variant="h5" gutterBottom>
-                    Loading...
-                  </Typography>
-                </Paper>
-              }
-            >
               {activePanel === "Jobs" && <JobsPanel token={token!} />}
               {activePanel === "Cars" && <CarsPanel token={token!} />}
               {activePanel === "Employees" && <EmployeesPanel token={token!} />}
               {activePanel === "Teams" && <TeamsPanel token={token!} />}
-            </Suspense>
           </Box>
           {isEditOpen && editItem && 
             <EditAdminModal
