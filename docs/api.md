@@ -966,7 +966,8 @@ If the state was not found:
 **Response Example:**
 ```json
 {
-  "message": "Checkout successful."
+  "message": "Checkout successful.",
+  "line": "Message sent successfully"
 }
 ```
 

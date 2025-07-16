@@ -1,9 +1,10 @@
 import AuthenticatedRequest from "../interfaces/authenticatedRequest.js";
 import logger from "../logger.js";
 import jobCheckinMessage from "../messages/jobCheckinMessage.js";
+import jobCheckoutMessage from "../messages/jobCheckoutMessage.js";
 import { getCarsByTeam, getCarById } from "../services/carService.js";
 import { getEmployeeById, getEmployeeByLineId, createEmployee } from "../services/employeeService.js";
-import { messageGroup } from "../services/lineService.js";
+import { message, messageGroup } from "../services/lineService.js";
 import { getReservationByUser, getReservationById, checkoutReservation, createReservation, updateReservationDescription } from "../services/reservationService.js";
 import generateAccessToken from "../utils/generateAccessToken.js";
 import { Request, Response } from "express";
@@ -69,7 +70,13 @@ export function userGetCarsController() {
 export function userCheckoutController() {
   return (req: AuthenticatedRequest, res: Response) => {
     const { reservationId, description } = req.body;
-    const userId = req.employee?.userId;
+    const employee = req.employee;
+    if (!employee) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    const userId = employee.userId;
     if (!userId) {
       res.status(401).json({ error: 'Unauthorized' });
       return;
@@ -108,7 +115,20 @@ export function userCheckoutController() {
         updateReservationDescription(reservationId, description);
       }
       checkoutReservation(reservationId, checkoutTime);
-      res.status(200).json({ message: 'Checkout successful.' });
+
+      return message(employee.lineId, jobCheckoutMessage(reservation)).then((result) => {
+        if (result.success) {
+          // If message sent successfully
+          res.status(200).json({ message: 'Checkout successful.', line: result.message });
+          return;
+        }
+        // If message failed to send
+        res.status(200).json({
+          message: 'Checkout successful.',
+          line: `Failed with status ${result.status} and error ${result.error}`
+        });
+        return;
+      });
     } catch (error) {
       logger.error("Error during checkout:", error);
       res.status(500).json({ error: 'Internal Server Error' });
@@ -162,22 +182,24 @@ export function userCheckinController() {
         return;
       }
 
-      return messageGroup(jobCheckinMessage(reservation)).then((result) => {
-        if (result.success) {
-          res.status(201).json({
-            success: true,
-            line: result.message
-          });
-          return;
-        }
+      return message(user.lineId, jobCheckinMessage(reservation)).then((userResult) => {
+        return messageGroup(jobCheckinMessage(reservation)).then((groupResult) => {
+          if (groupResult.success) {
+            res.status(201).json({
+              success: true,
+              line: groupResult.message
+            });
+            return;
+          }
 
-        else {
-          res.status(201).json({
-            success: true,
-            line: `Failed with status ${result.status} and error ${result.error}`
-          });
-          return;
-        }
+          else {
+            res.status(201).json({
+              success: true,
+              line: `Failed with status ${groupResult.status} and error ${groupResult.error}`
+            });
+            return;
+          }
+        });
       });
 
     } catch (error) {
