@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3';
 import db from '../db.js';
 import axios from 'axios';
+import logger from '../logger.js';
 
 export function storeState(state: string): Database.RunResult {
     const currTime = new Date().toISOString();
@@ -31,6 +32,7 @@ export const message = async(lineId: string, message: string): Promise<{
 
     const access_token = process.env.LINE_MESSAGING_API_ACCESS_TOKEN;
     if (!access_token) {
+        logger.error("LINE messaging failed: Missing LINE_MESSAGING_API_ACCESS_TOKEN");
         return { success: false, error: "Missing LINE_MESSAGING_API_ACCESS_TOKEN" };
     }
     try {
@@ -58,9 +60,15 @@ export const message = async(lineId: string, message: string): Promise<{
             status: res.status
         };
     } catch (error: any) {
+        const errorMessage = error?.response?.data?.message || error?.message || "Unknown error";
+        logger.error(`LINE messaging failed for lineId ${lineId}: ${errorMessage}`, {
+            lineId,
+            status: error?.response?.status,
+            error: errorMessage
+        });
         return {
             success: false,
-            error: error?.response?.data?.message || error?.message || "Unknown error",
+            error: errorMessage,
             status: error?.response?.status
         };
     }
@@ -80,14 +88,17 @@ export const messageMany = async (
     }
 
     if (!Array.isArray(lineIds) || lineIds.length === 0) {
+        logger.error("LINE messaging failed: No lineIds provided");
         return { success: false, error: "No lineIds provided." };
     }
     if (typeof message !== "string" || message.trim() === "") {
+        logger.error("LINE messaging failed: Message must be a non-empty string");
         return { success: false, error: "Message must be a non-empty string." };
     }
 
     const access_token = process.env.LINE_MESSAGING_API_ACCESS_TOKEN;
     if (!access_token) {
+        logger.error("LINE messaging failed: Missing LINE_MESSAGING_API_ACCESS_TOKEN");
         return { success: false, error: "Missing LINE_MESSAGING_API_ACCESS_TOKEN" };
     }
 
@@ -125,11 +136,14 @@ export const messageMany = async (
             );
             lastStatus = res.status;
         } catch (error: any) {
-            errors.push(
-                error?.response?.data?.message ||
-                error?.message ||
-                "Unknown error"
-            );
+            const errorMessage = error?.response?.data?.message || error?.message || "Unknown error";
+            logger.error(`LINE messaging failed for batch ${i + 1}/${batches.length}: ${errorMessage}`, {
+                batchIndex: i,
+                batchSize: batch.length,
+                status: error?.response?.status,
+                error: errorMessage
+            });
+            errors.push(errorMessage);
             lastStatus = error?.response?.status;
         }
         // Wait 1000ms between batches, except after the last one
@@ -145,6 +159,11 @@ export const messageMany = async (
             status: lastStatus
         };
     } else {
+        logger.error(`LINE messaging failed for ${errors.length} out of ${batches.length} batches: ${errors.join("; ")}`, {
+            totalBatches: batches.length,
+            failedBatches: errors.length,
+            errors: errors
+        });
         return {
             success: false,
             error: errors.join("; "),
@@ -161,6 +180,7 @@ export const messageGroup = async (str: string): Promise<{
 }> => {
     if (!process.env.LINE_LOGGING_GROUP_ID)
     {
+        logger.error("LINE group messaging failed: LINE_LOGGING_GROUP_ID undefined");
         return { success: false, error: "LINE Logging Group ID undefined." };
     }
     return await message(process.env.LINE_LOGGING_GROUP_ID, str);
