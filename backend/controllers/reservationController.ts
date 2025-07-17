@@ -82,7 +82,19 @@ export function reservationExportController() {
     const endTime = req.query.endTime
       ? new Date(req.query.endTime as string)
       : new Date('9999-12-31T23:59:59.999Z');
-    res.status(200).json(getReservationsBetweenTime(startTime, endTime));
+
+    const reservations = getReservationsBetweenTime(startTime, endTime);
+    res.status(200).json(reservations.map(reservation => ({
+      id: reservation.id,
+      userId: reservation.userId,
+      user: reservation.user,
+      carId: reservation.carId,
+      car: reservation.car,
+      teamName: reservation.teamName,
+      description: reservation.description,
+      checkinTime: new Date(reservation.checkinTime).toLocaleString(),
+      checkoutTime: reservation.checkoutTime ? new Date(reservation.checkoutTime).toLocaleString() : undefined
+    })));
   };
 }
 

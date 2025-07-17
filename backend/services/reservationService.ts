@@ -18,7 +18,7 @@ export function getReservations(
   else if (sortField === "user") orderBy = "Employee.name";
   else if (sortField === "carId") orderBy = "Reservation.carId";
   else if (sortField === "car") orderBy = "Car.plateNumber";
-  else if (sortField === "teamName") orderBy = "Car.teamName";
+  else if (sortField === "teamName") orderBy = "Team.name";
   else if (sortField === "description") orderBy = "Reservation.description";
   else if (sortField === "checkinTime") orderBy = "Reservation.checkinTime";
   else if (sortField === "checkoutTime") orderBy = "Reservation.checkoutTime";
@@ -58,7 +58,7 @@ export function getReservations(
           : filterField === "car"
           ? "Car.plateNumber"
           : filterField === "teamName"
-          ? "Car.teamName"
+          ? "Team.name"
           : "Reservation.description";
       filterClause += ` AND ${column} LIKE ?`;
       params.push(`%${filterValue}%`);
@@ -108,13 +108,14 @@ export function getReservations(
       Employee.name AS user,
       Reservation.carId AS carId,
       Car.plateNumber AS car,
-      Car.teamName AS teamName,
+      Team.name AS teamName,
       Reservation.description AS description,
       Reservation.checkinTime AS checkinTime,
       Reservation.checkoutTime AS checkoutTime
     FROM Reservation
     LEFT JOIN Employee ON Reservation.userId = Employee.userId
     LEFT JOIN Car ON Reservation.carId = Car.carId
+    LEFT JOIN Team ON Car.teamId = Team.teamId
     WHERE ${filterClause}
     ORDER BY ${orderBy} ${order}
     LIMIT ? OFFSET ?
@@ -130,16 +131,17 @@ export function getReservationsBetweenTime(startTime: Date, endTime: Date): Rese
       Employee.name AS user,
       Reservation.carId AS carId,
       Car.plateNumber AS car,
-      Car.teamName AS teamName,
+      Team.name AS teamName,
       Reservation.description AS description,
       Reservation.checkinTime AS checkinTime,
       Reservation.checkoutTime AS checkoutTime
     FROM Reservation
     LEFT JOIN Employee ON Reservation.userId = Employee.userId
     LEFT JOIN Car ON Reservation.carId = Car.carId
+    LEFT JOIN Team ON Car.teamId = Team.teamId
     WHERE Reservation.checkinTime >= ? AND Reservation.checkinTime <= ?
   `);
-  return stmt.all(startTime.toLocaleString(), endTime.toLocaleString());
+  return stmt.all(startTime.toISOString(), endTime.toISOString());
 }
 
 export function getReservationsCount(
@@ -216,7 +218,7 @@ export function getReservationsCount(
   }
 
   const stmt = db.prepare<any[], Count>(
-    `SELECT COUNT(*) as count FROM Reservation LEFT JOIN Employee ON Reservation.userId = Employee.userId LEFT JOIN Car ON Reservation.carId = Car.carId WHERE ${filterClause}`
+    `SELECT COUNT(*) as count FROM Reservation LEFT JOIN Employee ON Reservation.userId = Employee.userId LEFT JOIN Car ON Reservation.carId = Car.carId LEFT JOIN Team ON Car.teamId = Team.teamId WHERE ${filterClause}`
   );
   const count = stmt.get(...params);
   return count ? (count as any).count : 0;
@@ -235,13 +237,14 @@ export function getReservationById(reservationId: number): ReservationExternal |
       Employee.name AS user,
       Reservation.carId AS carId,
       Car.plateNumber AS car,
-      Car.teamName AS teamName,
+      Team.name AS teamName,
       Reservation.description AS description,
       Reservation.checkinTime AS checkinTime,
       Reservation.checkoutTime AS checkoutTime
     FROM Reservation
     LEFT JOIN Employee ON Reservation.userId = Employee.userId
     LEFT JOIN Car ON Reservation.carId = Car.carId
+    LEFT JOIN Team ON Car.teamId = Team.teamId
     WHERE Reservation.reservationId = ?
   `);
   return stmt.get(reservationId);
@@ -255,13 +258,14 @@ export function getReservationByUser(userId: number): ReservationExternal[] {
       Employee.name AS user,
       Reservation.carId AS carId,
       Car.plateNumber AS car,
-      Car.teamName AS teamName,
+      Team.name AS teamName,
       Reservation.description AS description,
       Reservation.checkinTime AS checkinTime,
       Reservation.checkoutTime AS checkoutTime
     FROM Reservation
     LEFT JOIN Employee ON Reservation.userId = Employee.userId
     LEFT JOIN Car ON Reservation.carId = Car.carId
+    LEFT JOIN Team ON Car.teamId = Team.teamId
     WHERE Reservation.userId = ?
     AND Reservation.checkoutTime IS NULL
     ORDER BY Reservation.reservationId DESC

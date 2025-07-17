@@ -167,45 +167,69 @@ export function userCheckinController() {
       return;
     }
 
+    let result;
     try {
-      const result = createReservation(userId, carId, description, checkinTime);
+      result = createReservation(userId, carId, description, checkinTime);
+    } catch (error) {
+      logger.error("Error during reservation creation:", error);
+      res.status(500).json({ error: 'Failed to create reservation.' });
+      return;
+    }
 
-      if (!result || !result.lastInsertRowid) {
-        res.status(500).json({ error: 'Failed to create reservation.' });
-        return;
-      }
+    if (!result || !result.lastInsertRowid) {
+      logger.error("Reservation creation returned invalid result:", result);
+      res.status(500).json({ error: 'Failed to create reservation.' });
+      return;
+    }
 
-      // success
-      const reservation = getReservationById(result.lastInsertRowid as number);
-      if (!reservation) {
-        res.status(500).json({ error: 'Failed to create reservation.' });
-        return;
-      }
+    let reservation;
+    try {
+      logger.info(`Attempting to retrieve reservation with id: ${result.lastInsertRowid}`);
+      reservation = getReservationById(result.lastInsertRowid as number);
+    } catch (error) {
+      logger.error(`Error during reservation retrieval for id ${result.lastInsertRowid}:`, (error && (error as any).stack) ? (error as any).stack : error);
+      res.status(500).json({ error: 'Failed to create reservation.' });
+      return;
+    }
 
-      return message(user.lineId, jobCheckinMessage(reservation)).then((userResult) => {
-        return messageGroup(jobCheckinMessage(reservation)).then((groupResult) => {
-          if (groupResult.success) {
-            res.status(201).json({
-              success: true,
-              line: groupResult.message
-            });
-            return;
-          }
+    if (!reservation) {
+      logger.error(`Reservation retrieval returned undefined for id: ${result.lastInsertRowid}`);
+      res.status(500).json({ error: 'Failed to create reservation.' });
+      return;
+    }
 
-          else {
-            res.status(201).json({
-              success: true,
-              line: `Failed with status ${groupResult.status} and error ${groupResult.error}`
-            });
-            return;
-          }
+    // Send message to user
+    message(user.lineId, jobCheckinMessage(reservation)).then((userResult) => {
+      // Send message to group
+      messageGroup(jobCheckinMessage(reservation)).then((groupResult) => {
+        if (groupResult.success) {
+          res.status(201).json({
+            success: true,
+            line: groupResult.message
+          });
+          return;
+        } else {
+          logger.error("Error during group message sending:", groupResult);
+          res.status(201).json({
+            success: true,
+            line: `Failed with status ${groupResult.status} and error ${groupResult.error}`
+          });
+          return;
+        }
+      }).catch((error) => {
+        logger.error("Exception during group message sending:", error);
+        res.status(201).json({
+          success: false,
+          line: 'Exception during group message sending.'
         });
       });
-
-    } catch (error) {
-      logger.error("Error during check-in:", error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
+    }).catch((error) => {
+      logger.error("Exception during user message sending:", error);
+      res.status(201).json({
+        success: false,
+        line: 'Exception during user message sending.'
+      });
+    });
   };
 }
 
