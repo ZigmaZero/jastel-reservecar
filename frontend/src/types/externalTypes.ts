@@ -32,6 +32,7 @@ export type ReservationExternal = {
     user: string, // easy lookup for UI
     carId: number,
     car: string, // easy lookup for UI
+    teamName: string,
     description: string,
     checkinTime: string,
     checkoutTime?: string

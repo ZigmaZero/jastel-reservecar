@@ -6,9 +6,9 @@ import { ReservationExternal } from '../interfaces/externalTypes.js';
 export function getReservations(
   pageSize: number, 
   offset: number,
-  sortField: "id" | "userId" | "user" | "carId" | "car" | "description" | "checkinTime" | "checkoutTime" | undefined,
+  sortField: "id" | "userId" | "user" | "carId" | "car" | "teamName" | "description" | "checkinTime" | "checkoutTime" | undefined,
   sortOrder: "asc" | "desc" | undefined,
-  filterField: "id" | "userId" | "user" | "carId" | "car" | "description" | "checkinTime" | "checkoutTime" | undefined,
+  filterField: "id" | "userId" | "user" | "carId" | "car" | "teamName" | "description" | "checkinTime" | "checkoutTime" | undefined,
   filterOp: "=" | "contains" | "onOrBefore" | "onOrAfter" | "isEmpty" | "isNotEmpty" | undefined,
   filterValue: string | undefined
 ): ReservationExternal[] {
@@ -18,6 +18,7 @@ export function getReservations(
   else if (sortField === "user") orderBy = "Employee.name";
   else if (sortField === "carId") orderBy = "Reservation.carId";
   else if (sortField === "car") orderBy = "Car.plateNumber";
+  else if (sortField === "teamName") orderBy = "Car.teamName";
   else if (sortField === "description") orderBy = "Reservation.description";
   else if (sortField === "checkinTime") orderBy = "Reservation.checkinTime";
   else if (sortField === "checkoutTime") orderBy = "Reservation.checkoutTime";
@@ -44,9 +45,9 @@ export function getReservations(
       filterClause += ` AND ${column} = ?`;
       params.push(Number(filterValue));
     }
-    // "contains" for user, car, description
+    // "contains" for user, car, teamName, description
     else if (
-      (filterField === "user" || filterField === "car" || filterField === "description") &&
+      (filterField === "user" || filterField === "car" || filterField === "teamName" || filterField === "description") &&
       filterOp === "contains" &&
       filterValue !== undefined &&
       filterValue !== ""
@@ -56,6 +57,8 @@ export function getReservations(
           ? "Employee.name"
           : filterField === "car"
           ? "Car.plateNumber"
+          : filterField === "teamName"
+          ? "Car.teamName"
           : "Reservation.description";
       filterClause += ` AND ${column} LIKE ?`;
       params.push(`%${filterValue}%`);
@@ -105,6 +108,7 @@ export function getReservations(
       Employee.name AS user,
       Reservation.carId AS carId,
       Car.plateNumber AS car,
+      Car.teamName AS teamName,
       Reservation.description AS description,
       Reservation.checkinTime AS checkinTime,
       Reservation.checkoutTime AS checkoutTime
@@ -126,6 +130,7 @@ export function getReservationsBetweenTime(startTime: Date, endTime: Date): Rese
       Employee.name AS user,
       Reservation.carId AS carId,
       Car.plateNumber AS car,
+      Car.teamName AS teamName,
       Reservation.description AS description,
       Reservation.checkinTime AS checkinTime,
       Reservation.checkoutTime AS checkoutTime
@@ -134,11 +139,11 @@ export function getReservationsBetweenTime(startTime: Date, endTime: Date): Rese
     LEFT JOIN Car ON Reservation.carId = Car.carId
     WHERE Reservation.checkinTime >= ? AND Reservation.checkinTime <= ?
   `);
-  return stmt.all(startTime.toISOString(), endTime.toISOString());
+  return stmt.all(startTime.toLocaleString(), endTime.toLocaleString());
 }
 
 export function getReservationsCount(
-  filterField?: "id" | "userId" | "user" | "carId" | "car" | "description" | "checkinTime" | "checkoutTime",
+  filterField?: "id" | "userId" | "user" | "carId" | "car" | "teamName" | "description" | "checkinTime" | "checkoutTime",
   filterOp?: "=" | "contains" | "onOrBefore" | "onOrAfter" | "isEmpty" | "isNotEmpty",
   filterValue?: string
 ): number {
@@ -161,7 +166,7 @@ export function getReservationsCount(
       filterClause += ` AND ${column} = ?`;
       params.push(Number(filterValue));
     } else if (
-      (filterField === "user" || filterField === "car" || filterField === "description") &&
+      (filterField === "user" || filterField === "car" || filterField === "teamName" || filterField === "description") &&
       filterOp === "contains" &&
       filterValue !== undefined &&
       filterValue !== ""
@@ -171,6 +176,8 @@ export function getReservationsCount(
           ? "Employee.name"
           : filterField === "car"
           ? "Car.plateNumber"
+          : filterField === "teamName"
+          ? "Car.teamName"
           : "Reservation.description";
       filterClause += ` AND ${column} LIKE ?`;
       params.push(`%${filterValue}%`);
@@ -228,6 +235,7 @@ export function getReservationById(reservationId: number): ReservationExternal |
       Employee.name AS user,
       Reservation.carId AS carId,
       Car.plateNumber AS car,
+      Car.teamName AS teamName,
       Reservation.description AS description,
       Reservation.checkinTime AS checkinTime,
       Reservation.checkoutTime AS checkoutTime
@@ -247,6 +255,7 @@ export function getReservationByUser(userId: number): ReservationExternal[] {
       Employee.name AS user,
       Reservation.carId AS carId,
       Car.plateNumber AS car,
+      Car.teamName AS teamName,
       Reservation.description AS description,
       Reservation.checkinTime AS checkinTime,
       Reservation.checkoutTime AS checkoutTime

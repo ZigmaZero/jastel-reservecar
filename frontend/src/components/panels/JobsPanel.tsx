@@ -164,6 +164,12 @@ const JobsPanel: FC<JobsPanelProps> = ({ token }) => {
       )
     },
     {
+      field: "teamName", headerName: "Team", flex: 1, width: 120,
+      filterOperators: getGridStringOperators().filter(
+        (operator) => operator.value === "contains"
+      )
+    },
+    {
       field: "description", headerName: "Description", flex: 1, width: 150,
       filterOperators: getGridStringOperators().filter(
         (operator) => operator.value === "contains"

@@ -107,6 +107,7 @@ export function reservationGetPaginatedController() {
       sortField !== "user" &&
       sortField !== "carId" &&
       sortField !== "car" &&
+      sortField !== "teamName" &&
       sortField !== "description" &&
       sortField !== "checkinTime" &&
       sortField !== "checkoutTime" &&
@@ -127,6 +128,7 @@ export function reservationGetPaginatedController() {
       filterField !== "user" &&
       filterField !== "carId" &&
       filterField !== "car" &&
+      filterField !== "teamName" &&
       filterField !== "description" &&
       filterField !== "checkinTime" &&
       filterField !== "checkoutTime" &&
@@ -159,7 +161,7 @@ export function reservationGetPaginatedController() {
       }
     }
 
-    if (filterField === "car" || filterField === "user" || filterField === "description") {
+    if (filterField === "car" || filterField === "user" || filterField === "teamName" || filterField === "description") {
       if (filterOp !== "contains") {
         res.status(400).json({
           error: 'Invalid filterOp.'
