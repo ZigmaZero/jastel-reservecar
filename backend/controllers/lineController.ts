@@ -1,4 +1,4 @@
-import { getState, storeState } from "../services/lineService.js";
+import { getState, removeState, storeState } from "../services/lineService.js";
 import { Request, Response } from "express";
 import generateRandomState from "../utils/generateRandomState.js";
 
@@ -21,7 +21,7 @@ export function lineDeleteStateController() {
         }
 
         if (getState(state)) {
-            // Optionally, you might want to delete the state here if your getState does not do so
+            removeState(state);
             res.status(200).json({ success: true });
             return;
         } else {
