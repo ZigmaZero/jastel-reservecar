@@ -2,7 +2,7 @@ import db from '../db.js';
 import { Admin } from '../interfaces/internalTypes.js';
 import logger from '../logger.js';
 import { exit } from 'process';
-import { hashPassword, comparePassword } from '../utils/passwordHash.js';
+import { hashPassword, comparePassword } from './passwordHash.js';
 
 export function recoverSystem(): void {
     try {
@@ -33,4 +33,21 @@ export function recoverSystem(): void {
         logger.error('Error during system recovery:', error);
         exit(1);
     }
+
+    try {
+        const DropLineLoginStateStmt = db.prepare('DROP TABLE IF EXISTS LineLoginState');
+        DropLineLoginStateStmt.run();
+        logger.info('LineLoginState table dropped successfully.');
+        const CreateLineLoginStateStmt = db.prepare(`
+            CREATE TABLE IF NOT EXISTS LineLoginState (
+                state TEXT UNIQUE NOT NULL,
+                createdAt TEXT NOT NULL
+            )
+        `);
+        CreateLineLoginStateStmt.run();
+        logger.info('LineLoginState table reinitialized successfully.');
+    } catch (error) {
+        logger.warn('Error while reinitializing LineLoginState:', error);
+    }
+
 }
