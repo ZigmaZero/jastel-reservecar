@@ -100,16 +100,28 @@ const JobsPanel: FC<JobsPanelProps> = ({ token }) => {
       "id",
       "user",
       "car",
+      "teamName",
       "description",
       "checkinTime",
       "checkoutTime"
     ];
 
+    // Helper to format date as DD/MM/YYYY, HH:MM:SS
+    const formatDate = (dateString: string | null | undefined) => {
+      if (!dateString) return "";
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return "";
+      const pad = (n: number) => n.toString().padStart(2, "0");
+      return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}, ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    };
+
     // Create CSV rows
     const rows = exportData.map(reservation =>
       headers.map(header => {
-        // Escape quotes and commas in values
-        const value = reservation[header as keyof ReservationExternal];
+        let value = reservation[header as keyof ReservationExternal];
+        if (header === "checkinTime" || header === "checkoutTime") {
+          value = formatDate(value as string);
+        }
         if (value === undefined || value === null) return "";
         return `"${String(value).replace(/"/g, '""')}"`;
       }).join(",")
@@ -186,8 +198,12 @@ const JobsPanel: FC<JobsPanelProps> = ({ token }) => {
       ),
       valueGetter: (value) =>
         value ? new Date(value) : null,
-      valueFormatter: (value) =>
-        value ? new Date(value).toLocaleString() : "Not checked in"
+      valueFormatter: (value) => {
+        if (!value) return "Not checked in";
+        const date = new Date(value);
+        const pad = (n: number) => n.toString().padStart(2, "0");
+        return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}, ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+      }
     },
     {
       field: "checkoutTime",
@@ -203,8 +219,12 @@ const JobsPanel: FC<JobsPanelProps> = ({ token }) => {
       ),
       valueGetter: (value) =>
         value ? new Date(value) : null,
-      valueFormatter: (value) =>
-        value ? new Date(value).toLocaleString() : "Not checked out"
+      valueFormatter: (value) => {
+        if (!value) return "Not checked out";
+        const date = new Date(value);
+        const pad = (n: number) => n.toString().padStart(2, "0");
+        return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}, ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+      }
     },
     {
       field: "actions",
