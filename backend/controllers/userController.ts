@@ -114,7 +114,12 @@ export function userCheckoutController() {
       if (typeof description === 'string' && description.trim() !== '' && description !== reservation.description) {
         updateReservationDescription(reservationId, description);
       }
-      checkoutReservation(reservationId, checkoutTime);
+      const checkoutResult = checkoutReservation(reservationId, checkoutTime);
+      if (!checkoutResult || checkoutResult.changes === 0) {
+        logger.error(`Checkout failed: No rows updated for reservationId ${reservationId}`);
+        res.status(500).json({ error: 'Failed to checkout reservation.' });
+        return;
+      }
 
       return message(employee.lineId, jobCheckoutMessage(reservation)).then((result) => {
         if (result.success) {
